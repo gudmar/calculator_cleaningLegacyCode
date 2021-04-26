@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Online calculator</title>
+      <link rel="stylesheet" type="text/css" href="css/calculator.css">
+      <meta charset="UTF-8" />
+      <meta name="description" content="calculate simple aritmetic" />
+      <meta name="keywords" content="summ, difference multiplication division" />
+      <meta name="author" content="Marek Gudalewicz" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+	
+  <body>
+    <div class="display-area">  <!-- to fitt a calculator container properly -->
+      <div class="displsy-area aligner"> <!-- to align verticly to the center -->
+      </div> <!-- aligner -->
+		
+    <div class="housing"> <!--containes the whole calculator body-->
+      <div class="display-box button-row" id="displaySection">
+        <input type="text" class="display-text" id="display" spellcheck="false" value="0" />
+      </div>  <!-- display-box -->
+			
+      <div class="keypad"> <!--to align wahole block horizontaly -->
+        <div class="keypad_section keypad_section--left" id="buttonsSection1"> <!-- on/off c ce -->
+          <div class="button-row">
+            <button id="onOff" class="buttons error-style-button" onclick="console.log(c.readFromDisplay()); console.log(converter(c.readFromDisplay()));">IO</button>
+          </div>
+          <div class="button-row">
+            <button id="ce" class="buttons warning-style-button" onclick="c.removeLastFromDisplay();">CE</button>
+          </div>
+          <div class="button-row">				
+            <button id="c" class="buttons pass-style-button buttons-high" onclick="c.setDisplay();">C</button>
+          </div>
+        </div> <!-- buttonsSection1 keypad_section -->
+        <div class="keypad_section keypad_section--middle" id="buttonSection2"> <!-- numbers and .-->
+          <div class="button-row">
+            <button id="b7" class="buttons normal-style-button" onclick="c.addToDisplay('7');">7</button>
+            <button id="b8" class="buttons normal-style-button" onclick="c.addToDisplay('8');">8</button>
+            <button id="b9" class="buttons normal-style-button" onclick="c.addToDisplay('9');">9</button>
+          </div>		
+          <div class="button-row">
+            <button id="b5" class="buttons normal-style-button" onclick="c.addToDisplay('4');">4</button>
+            <button id="b6" class="buttons normal-style-button" onclick="c.addToDisplay('5');">5</button>
+            <button id="b7" class="buttons normal-style-button" onclick="c.addToDisplay('6');">6</button>
+          </div>
+          <div class="button-row">
+            <button id="b1" class="buttons normal-style-button" onclick="c.addToDisplay('1');">1</button>
+            <button id="b2" class="buttons normal-style-button" onclick="c.addToDisplay('2');">2</button>
+            <button id="b3" class="buttons normal-style-button" onclick="c.addToDisplay('3');">3</button>
+          </div>
+          <div class="button-row">
+            <button id="b0" class="buttons buttons-wide normal-style-button" onclick="c.addToDisplay('0');">0</button>
+            <button id="b." class="buttons normal-style-button" onclick="c.addToDisplay('.');">.</button>
+          </div>			
+        </div> <!-- button section 2 -->
+        <div class="keypad_section keypad_section--right" id="buttonSection3"> <!-- +, -, *, / ... -->
+          <div class="button-row">
+            <button id="bMultiply" class="buttons normal-style-button" onclick="c.addToDisplay('x');">x</button>
+            <button id="bOpenParthesis" class="buttons normal-style-button" onclick="c.addToDisplay('(');">(</button>
+          </div>
+          <div class="button-row">				
+            <button id="bDivide" class="buttons normal-style-button" onclick="c.addToDisplay('/');">/</button>
+            <button id="bcloseParthesis" class="buttons normal-style-button" onclick="c.addToDisplay(')');">)</button>
+          </div>
+          <div class="button-row">
+            <button id="bDifference" class="buttons normal-style-button" onclick="c.addToDisplay('-');">-</button>
+            <button id="bEqual" class="buttons buttons-high normal-style-button" onclick="console.log('Final result is: ' + finalResult())">=</button>
+          </div>	
+          <div class="button-row">
+            <button id="bSum" class="buttons normal-style-button button-row--only_one" onclick="c.addToDisplay('+');">+</button>
+            </div>
+          </div> <!-- buttonSection3 -->
+        </div> <!-- keypad-->		
+      </div> <!--housig-->
+      <div class="display-area aligner"> <!-- to align verticly to the center -->
+      </div> <!-- aligner -->
+    </div> <!-- display-area --> 
+    	<script type="text/javascript" src="scripts/scripts_calc.js"></script>  <!-- shoud be loaded here for faster page loading experience  -->
+  </body>
+	
+	
+</html>

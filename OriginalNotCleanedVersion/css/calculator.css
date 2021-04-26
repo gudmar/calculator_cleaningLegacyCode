@@ -1,0 +1,210 @@
+@font-face  /* new font */
+
+{
+font-family: "digital";
+src: url('../font/scientific/Scientific Calculator LCD.ttf');
+
+}
+
+.display-area {
+	background-color: rgb(200, 200, 200);
+	width: 95vw;
+	height: 95vh;
+	/*border: red solid;	
+	/*border: solid thin; /**/
+	/*margin: 2px; /**/
+}
+.aligner {
+	height: 24%;
+	position: relative; /* This makes z-index work*/
+	z-index: -10;       /* This prevents shadow from being hidden under this div*/
+}
+.housing {
+	/display: border-box;
+	width: 50vmax;
+	height: 35vmax;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	border-radius: 5px;
+	background-image: linear-gradient(-45deg, rgb(128, 128, 128), rgb(50, 50, 50));
+	box-shadow: 1.5vw 1vw 4px rgb(0, 0, 0);
+	margin: auto;
+}
+
+/*------------------------------------------------------*\
+#display section
+\*------------------------------------------------------*/
+
+
+.display-box {
+	display: block; /* horizontaly align middle */
+	position: relative;
+	top: 15%;
+	width: 80%;
+	height: 10%;
+	padding: 0%;
+	margin: auto;	
+}
+
+.display-text {
+	position: absolute; /* let text box be in the middle up*/
+	box-sizing: border-box; /* finally I see it works */
+	outline: none; /* removing blue glow on border when focussed */
+	top: 0;
+	/left: 10%;
+	margin: auto;
+	width: 98%;
+	height: 150%;
+	/clear: both;
+	z-index: 0;
+	font-size: 50%;
+	border-radius: 2px;
+	background: black;
+	color: rgb(0, 255, 0);
+	text-align: right;
+	padding-right: 1em;
+	padding-left: 1em;
+	padding-top: 0;
+	padding-bottom: 0;
+	font-family: digital;
+	overflow: auto;
+	/*display: block;*/
+}
+
+/*------------------------------------------------------*\
+#keyboard
+\*------------------------------------------------------*/
+.keypad {
+	z-index: 2;
+	margin: auto;
+	width: 80%;
+	position: relative; /* absolute owerrides auto wigth and height*/
+	top: 30%;
+	overflow: auto;  /* Strech divs height to childrens height*/
+}
+.keypad_section {
+	display: inline-block;
+	border: solid rgb(200, 200, 200);
+	border-radius: 3px;
+	margin-right: 0%;
+	margin-left: 9%;
+	/float: left;
+	
+}
+
+.keypad_section--left { /*10% for each button row */
+	width: 10%;
+	/position: relative;
+	/overflow: hidden;
+	
+}
+.keypad_section--middle {
+	width: 30%;
+	position: relative;
+}
+.keypad_section--right {
+	width: 20%;
+	margin-right: 0;
+}
+
+/*------------------------------------------------------*\
+#buttons
+\*------------------------------------------------------*/
+
+.buttons {
+	float:left; /* IMPORTANT: no right spaces after buttons !!!!!*/
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.5em;
+	padding: 0;
+}
+.buttons {
+	border-width: 0.2em;
+	width: 4vmax; /*size independent of screan horizontal or vertical*/
+	height: 4vmax;	
+}
+.normal-style-button {
+	background: linear-gradient(-45deg, white, rgba(0, 0, 250, 0.1));	
+}
+.normal-style-button:hover {
+	background: linear-gradient(-45deg, white, rgba(70, 70, 250, 0.3));
+}
+.normal-style-button:active {
+	background: linear-gradient(-45deg, yellow, rgba(70, 250, 250, 0.3));
+}
+
+.error-style-button {
+	background: linear-gradient(-45deg, red, rgba(250, 0, 0, 0.1));
+	/*border-image: linear-gradient(to bottom, rgba(250, 0, 0, 0.1), red);*/ /*border gradients not of the best quality*/
+}
+.error-style-button:hover {
+	background: linear-gradient(-45deg, red, rgba(250, 70, 70, 0.7));
+	/*border-image: linear-gradient(to bottom, rgba(250, 0, 0, 0.1), red);*/ /*border gradients not of the best quality*/
+}
+
+.warning-style-button {
+	background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.1));
+	/*border-image: linear-gradient(to bottom, rgba(0, 250, 0, 0.1), green);*/
+}
+.warning-style-button:hover {
+	background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.9));
+	/*border-image: linear-gradient(to bottom, rgba(0, 250, 0, 0.1), green);*/
+}
+.pass-style-button {
+	background: linear-gradient(-45deg, orange, rgba(250, 0, 0, 0.1));
+	/*border-image: linear-gradient(to bottom, rgba(250, 0, 0, 0.1), orange);*/
+}
+.pass-style-button:hover {
+	background: linear-gradient(-45deg, orange, rgba(250, 70, 70, 0.7));
+	/*border-image: linear-gradient(to bottom, rgba(250, 0, 0, 0.1), orange);*/
+}
+
+.buttons-high {
+	height: 8vmax;
+}
+.buttons-wide {
+	width: 8vmax;
+}
+
+.button-row--only_one {
+	clear: left;
+	position: absolute; /* + - displaying properly */
+	left: 0;
+	width: 4vmax;
+}
+.onlyOne {
+	width: 4vmax; /* + - displaying properly */
+}
+.button-row {
+	height: 4vmax;
+	position:relative; /* + - displaying properly */
+
+}
+.button-row:after{
+	content: "";
+	clear: both;
+	display: table;
+}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
