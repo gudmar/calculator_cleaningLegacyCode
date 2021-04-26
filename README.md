@@ -16,5 +16,8 @@ Here I am working to have job done.
 ## Cleaned Version
 Here I wil place final calculator class with tests when job is done. 
 
-# Future work
+## Future work
 As next exercise I am going to write a calculator as my first React exercise
+
+## Progres
+Work started with only 60% tests pass. Not the best result. Original calculator does not support correctly many boundry cases
