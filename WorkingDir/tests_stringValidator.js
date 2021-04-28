@@ -79,132 +79,132 @@ class Test{
 let testCase1 = {
     name: '2 + 2',
     expression: '2+2',
-    expectedResult: [2, '+', 2].toString()
+    expectedResult: true
 }
 let testCase2 = {
     name: '(2 + 2)',
     expression: '(2+2)',
-    expectedResult: [2, '+', 2].toString()    
+    expectedResult: true
 }
 let testCase3 = {
     name: '-2',
     expression: '-2',
-    expectedResult: [-2].toString()    
+    expectedResult: true
 }
 let testCase4 = {
     name: '-2-3',
     expression: '-2-3',
-    expectedResult: [-2, '-', 3].toString()    
+    expectedResult: true
 }
 let testCase5 = {
     name: '--2',
     expression: '--2',
-    expectedResult: [2].toString()    
+    expectedResult: true
 }
 let testCase6 = {
     name: '+2',
     expression: '+2',
-    expectedResult: [2].toString()    
+    expectedResult: true
 }
 let testCase7 = {
     name: '+++2',
     expression: '+++2',
-    expectedResult: [2].toString()    
+    expectedResult: true
 }
 let testCase8 = {
     name: '--++-3',
     expression: '--++-3',
-    expectedResult: [-3].toString()    
+    expectedResult: true
 }
 let testCase9 = {
     name: '(2+3)-(4)',
     expression: '(2+3)-(4)',
-    expectedResult: ['(', 2, '+', 3, ')', '-', '(', 4, ')'].toString()    
+    expectedResult: true
 }
 let testCase10 = {
     name: 'd',
     expression: 'd',
-    expectedResult: 'error' 
+    expectedResult: false
 }
 let testCase11 = {
     name: '2.3.4',
     expression: '2.3.4',
-    expectedResult: 'error'
+    expectedResult: false
 }
 let testCase12 = {
     name: '.23',
     expression: '.23',
-    expectedResult: 'error'
+    expectedResult: false
 }
 let testCase13 = {
     name: '23.',
     expression: '23.',
-    expectedResult: [23].toString()
+    expectedResult: true
 }
 let testCase14 = {
     name: '*2',
     expression: '*2',
-    expectedResult: 'error'
+    expectedResult: false
 }
 let testCase15 = {
     name: '3/-2',
     expression: '3/-2',
-    expectedResult: [3, '/', -2].toString()    
+    expectedResult: true
 }
 let testCase16 = {
     name: '2-/3',
     expression: '2-/3',
-    expectedResult: 'error'
+    expectedResult: false
 }
 let testCase17 = {
     name: '34.4235',
     expression: '34.4235',
-    expectedResult: [34.4235]
+    expectedResult: true
 }
 let testCase18 = {
     name: '2.34+-3.4',
     expression: '2.34+-3.5',
-    expectedResult: [2.34, '+', -3.4].toString()    
+    expectedResult: true
 }
 let testCase19 = {
     name: '2--3',
     expression: '2--3',
-    expectedResult: [2, '-', -3].toString()    
+    expectedResult: true
 }
 let testCase20 = {
     name: '2-+3',
     expression: '2-+3',
-    expectedResult: [2, '-', 3].toString()    
+    expectedResult: true
 }
 let testCase21 = {
     name: '2++3',
     expression: '2++3',
-    expectedResult: [2, '+', 3].toString()    
+    expectedResult: true
 }
 let testCase22 = {
     name: '2+++3',
     expression: '2+++3',
-    expectedResult: [2, '+', 3].toString()    
+    expectedResult: true
 }
 let testCase23 = {
     name: '2---3',
     expression: '2---3',
-    expectedResult: [2, '-', 3].toString()    
+    expectedResult: true
 }
 let testCase24 = {
     name: '2-(+3-(-4+-5))',
     expression: '2-(+3-(-4+-5))',
-    expectedResult: [2, '-', '(', '+', 3, '-', '(', '-', 4, '+', -5, ')'].toString()    
+    expectedResult: true
 }
 let testCase25 = {
     name: '2.1-(+3.1-(-4.1+-5.1))',
     expression: '2.1-(+3.1-(-4.1+-5.1))',
-    expectedResult: [2.1, '-', '(', '+', 3.1, '-', '(', '-', 4.1, '+', -5.1, ')'].toString()    
+    expectedResult: true
 }
 let testCase26= {
     name: '2-',
     expression: '2-',
-    expectedResult: 'error'    
+    expectedResult: false
 }
 
 let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
@@ -228,16 +228,16 @@ function stringToElement(htmlString){
 
 (function runTestAndPlaceResults() {
     let placer = new TestResultPlacer('result')
-    let evaluator = function(expressionAsString) { 
+    let validator = new StringExpressionValidator()
+    let validate = function(expressionAsString) { 
         console.log(expressionAsString)
-        let converter = stringToExpression;
-        return stringToExpression(expressionAsString)
+        return validator.validate(expressionAsString)
     }
     let comparationMethod = evaluator
 
     for (let tc of allTestCases){
         console.log(tc.expression)
-        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, evaluator)
+        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, validate)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
 
