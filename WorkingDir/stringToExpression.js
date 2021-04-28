@@ -11,9 +11,8 @@ function stringToExpression(strInput) {
 		let plusMinusUnipolarAllowedAfter = '(+-'
 
 
-
 		let isCharacterADigit = function(character) {
-			return !isNaN(parseInt(String(character)))
+			return !isNaN(parseInt(character))
 		}
 
 
@@ -23,6 +22,10 @@ function stringToExpression(strInput) {
 
 		let isCharacterSupported = function(character) {
 			return isCharacterIn(allowedCharacters, character)
+		}
+
+		let addOperatorToExpression = function(character) {
+			result.push(character)
 		}
 
 
@@ -37,6 +40,8 @@ function stringToExpression(strInput) {
 			})
 			if (characterIsIllegal) {throw new SyntaxError(`${this.constructor.name}: character ${character} is not supported`)}
 		}
+
+
 
 
 		let processSingleCharacter = function(character, index, strInput) {
@@ -56,22 +61,23 @@ function stringToExpression(strInput) {
 			// result.push(character)
 
 			if (isCharacterADigit(character)) {
-				nextNumberConversionStep()
+				nextNumberConversionStep(character)
 				return null
 			} 
-			if (isCharacterIn('+-')){
+			if (isCharacterIn('+-'), character){
 				if (wasLastCharacterIn('(-+') || isThisFirstProcessedCharacter()) {
-					nextNumberConversionStep()
+					nextNumberConversionStep(character)
 					return null
 				}
 			}
-			if (isCharacterIn('+-*/')){
-				if (isCharacterADigit(getLastProcessedCharacter) || isThisFirstProcessedCharacter() || isCharacterIn(')')){
+			if (isCharacterIn('+-*/'), character){
+				if (isCharacterADigit(getLastProcessedCharacter()) || isThisFirstProcessedCharacter() || isCharacterIn(')')){
 					finalizePreviousNumberConversion();
-					addOperatorToExpression()	
+					addOperatorToExpression(character)	
 					return null
 				}
 			}
+
 
 			throw new SyntaxError(`${this.constructor.name}: last character was ${getLastProcessedCharacter()}, 
 								   current is ${character}. This is not supported combination`
@@ -85,26 +91,37 @@ function stringToExpression(strInput) {
 
 
 		function finalizePreviousNumberConversion() {
-			result.push(getCurrentNumberConverter.getProcessedSoFar())
+			result.push(getNumberConverter().getProcessedSoFar())
 			getNumberConverter().resetConverter()
 		}
 
 		function getNumberConverter(){
-			if (numberConverter == null) {numberConverter = new numberConverter()} 
+			if (numberConverter == null) {numberConverter = new NumberConverter()} 
 			return numberConverter;
+		}
+
+		try{
+			Array.from(strInput).forEach(processSingleCharacter);
+			return result	
+		} catch (e) {
+			console.log(e)
+			return 'error'
 		}
 	}
 
-	class numberConverter{
+	class NumberConverter{
 		constructor(){
 			this.convertedSoFar = '';
 			this.wasThereADot = false;
 			this.minusFlag = false;
 		}
 		nextConversionStep(character) {
-			if (!this.isCharacterADigit(character) && !this.isCharacterIn('.+-')) this.throwSyntaxError()
+			console.log(!this.isCharacterADigit(character))
+			console.log(!this.isCharacterIn('.+-', character))
+			console.log(character)
+			if (!this.isCharacterADigit(character) && !this.isCharacterIn('.+-', character)) this.throwSyntaxError(character)
 			if (character == '.') {
-				if (this.wasThereADot) this.throwSyntaxError();
+				if (this.wasThereADot) this.throwSyntaxError(character);
 				this.wasThereADot = true;
 			}
 			if (this.wasThereAnyDigitSoFar()){
@@ -140,9 +157,9 @@ function stringToExpression(strInput) {
 		wasThereAnyDigitSoFar() {
 			return this.convertedSoFar != '' ? true : false;
 		}
-		throwSyntaxError() {
+		throwSyntaxError(currentCharacter) {
 			throw SyntaxError(`${this.constructor.name}: error in syntax: processed so far: ${this.convertedSoFar}, 
-				${this.wasThereADot ? 'there was already a dot' : 'there was not a dot yet'} currently processed character: ${character} `
+				${this.wasThereADot ? 'there was already a dot' : 'there was not a dot yet'} currently processed character: ${currentCharacter} `
 			)
 		}
 		toggleMinusSign() {
