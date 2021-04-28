@@ -56,27 +56,43 @@ function stringToExpression(strInput) {
 			let isThisFirstProcessedCharacter = function(){
 				return index == 0 ? true : false;
 			}
+			let isThisLastProcessedCharacter = function() {
+				return index == strInput.length -1 ? true : false;
+			}
 
 			ifCharacterIsIllegalCharacterThrowError(character)
 			// result.push(character)
 
+			if (isThisLastProcessedCharacter(character) && (!isCharacterADigit(character) || (!isCharacterIn('.)')))) {
+				throw new SyntaxError(`${this.constructor.name}: last character is supposed to be a digit`)
+			}
+
 			if (isCharacterADigit(character)) {
+				console.log(`character ${character} is a digit`)
 				nextNumberConversionStep(character)
+				if (isThisLasttProcessedCharacter(character)){
+					console.log(`Character ${character} is a digit and last character`)
+					finalizePreviousNumberConversion();
+				}
+
 				return null
 			} 
 			if (isCharacterIn('+-'), character){
 				if (wasLastCharacterIn('(-+') || isThisFirstProcessedCharacter()) {
+					console.log(`Character is ${character}, and last processed character was '+-" or null`)
 					nextNumberConversionStep(character)
 					return null
 				}
 			}
 			if (isCharacterIn('+-*/'), character){
-				if (isCharacterADigit(getLastProcessedCharacter()) || isThisFirstProcessedCharacter() || isCharacterIn(')')){
+				if (isCharacterADigit(getLastProcessedCharacter()) || isCharacterIn(')', getLastProcessedCharacter())){
+					console.log(`CHaracter ${character} is operator, last processed character was ) or this is the first porcessed character`)
 					finalizePreviousNumberConversion();
 					addOperatorToExpression(character)	
 					return null
 				}
 			}
+			 
 
 
 			throw new SyntaxError(`${this.constructor.name}: last character was ${getLastProcessedCharacter()}, 
@@ -102,6 +118,7 @@ function stringToExpression(strInput) {
 
 		try{
 			Array.from(strInput).forEach(processSingleCharacter);
+			console.log(result)
 			return result	
 		} catch (e) {
 			console.log(e)
