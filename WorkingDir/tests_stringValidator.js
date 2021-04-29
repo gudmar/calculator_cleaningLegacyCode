@@ -288,12 +288,28 @@ let testCaseO = {
     expression: '3+(.)-4',
     expectedResult: false    
 }
+let testCaseP = {
+    name: '(3 + 4) * 5',
+    expression: '(3 + 4) * 5',
+    expectedResult: true    
+}
+let testCaseR = {
+    name: '(3 + 4 3) * 5 5',
+    expression: '(3 + 4 3) * 5 5',
+    expectedResult: false
+}
+let testCaseT = {
+    name: '4/-5 => not valid',
+    expression: '4/-5',
+    expectedResult: false
+}
 
+// let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE,
+//     testCaseF, testCaseG, testCaseH, testCaseI, testCaseJ, 
+//     testCaseK, testCaseL, testCaseM, testCaseN, testCaseO, testCaseP, testCaseR, testCaseT
+// ];
 
-let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE,
-    testCaseF, testCaseG, testCaseH, testCaseI, testCaseJ, 
-    testCaseK, testCaseL, testCaseM, testCaseN, testCaseO
-];
+let allTestCases = [testCaseJ]
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
