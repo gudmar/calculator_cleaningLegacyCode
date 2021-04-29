@@ -2,23 +2,30 @@
 
 class StringExpressionValidator{
     constructor(stringExpression){
-        this.supportedNonDigitCharacters = '-+/*.()'
+        this.supportedNonDigitCharacters = '-+/*.() '
+        this.lastSymbolicType = null
+        this.stringOfExpressionsSymbolicTypes = ''
     }
+
+
 
     validate(stringExpression){
         this.resetFlags();
         let arrayOfBooleanResults = Array.from(stringExpression).map(this._procesSingleCharacter.bind(this))
-        return arrayOfBooleanResults.reduce((acc, result, index) => {
+        
+        let output = arrayOfBooleanResults.reduce((acc, result, index) => {
             if (index == 0) {acc = result}
             return acc && result
         })
+        console.log(this.stringOfExpressionsSymbolicTypes)
+        this.stringOfExpressionsSymbolicTypes = '';
+        return output
     }
 
     resetFlags(){
         this.isNumberProcessed = false;
         this.wasADotInCurrentlyProcessedNumber = false;
-        this.nrOfOpeningBrackets = 0;
-        this.nrOfClosingBrackets = 0;
+        
     }
 
     areAllConditionsFromArrayMet(arrayOfBooleans) {
@@ -26,6 +33,24 @@ class StringExpressionValidator{
             if (index == 0) {acc = result}
             return acc && result
         })
+    }
+
+    getSymbolicTypeOfElement(character) {
+        // console.log(character)
+            if (this.isCharacterADigit(character) || character == '.') return 'n'
+            if (this.isCharacterIn('+-/*()', character)) return character;
+            if (character == ' ') return 's';
+            if (character == undefined) return 'u';
+            return 'x'
+        }
+    
+
+    getSymbolicTypeOfCharacterAtPosition(index) {
+        return index < 0 || index >= this.stringOfExpressionsSymbolicTypes.length ? null : this.stringOfExpressionsSymbolicTypes[index]
+    }
+
+    recordSymbolicType(typeToRecord) {
+        this.stringOfExpressionsSymbolicTypes = this.stringOfExpressionsSymbolicTypes + typeToRecord
     }
 
     _procesSingleCharacter(character, index, expression){
@@ -37,6 +62,32 @@ class StringExpressionValidator{
                 return isValidCallback()
             }
         }
+
+        let addNextElementToArrayOfSymbolicTypesIfNeeded = function(){
+            // console.log(this.getSymbolicTypeOfElement(character))
+            let isCurrentlyANumberProcessed = (this.isNumberProcessed && this.getSymbolicTypeOfElement(getLastCharacter()) == 'n')
+            let isCurrentlySpaceProcessed = this.getSymbolicTypeOfElement(character) == 's'
+            
+            if (!(isCurrentlySpaceProcessed || isCurrentlyANumberProcessed)){
+                this.stringOfExpressionsSymbolicTypes = this.stringOfExpressionsSymbolicTypes + this.getSymbolicTypeOfElement(character)
+            }
+            if (this.lastSymbolicType)
+                this.lastSymbolicType = this.getLastSymbolicType(character)
+            return true
+        }.bind(this)
+
+        let getLastSymbolicType = function() {return this.getSymbolicTypeOfCharacterAtPosition(index-1)}
+
+        let changeLastAndCurrentElementType = function() {
+            this.lastProcessedElement = this.currentProcessedElement
+            this.currentProcessedElement = character
+        }
+
+        let getLastCharacter = function(){
+            return index == 0 ? null : expression[index - 1]
+        }
+
+        
 
         let isLastCharacter = function() {return index == expression.length -1}
 
@@ -100,7 +151,7 @@ class StringExpressionValidator{
         }.bind(this)
 
         let finalizeNumberProcessingIfNotNumberChar = function(character) {
-            if (this.isCharacterIn('+-()/*', character)){
+            if (this.isCharacterIn('+-()/* ', character)){
                 this.isNumberProcessed = false;
                 this.wasADotInCurrentlyProcessedNumber = false;
             }
@@ -112,11 +163,13 @@ class StringExpressionValidator{
             ifThisIsLastCharacterIsItValid(),
             ifNumberIsProcessedIsItStillValid(character),
             isADotNotStandAlone(),
-            checkIfNrAndOrderOfBracketsIsCorrect()
+            checkIfNrAndOrderOfBracketsIsCorrect(),
+            addNextElementToArrayOfSymbolicTypesIfNeeded()
 
         ]
 
         console.log(arrayOfRules)
+        
 
         return this.areAllConditionsFromArrayMet(arrayOfRules)
 
@@ -145,9 +198,6 @@ class StringExpressionValidator{
         return isCharacterIn(allowedCharacters, character)
     }
 
-    addOperatorToExpression(character) {
-        result.push(character)
-    }
 
 
     isCharacterLegal(character) {
