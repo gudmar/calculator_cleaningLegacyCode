@@ -63,10 +63,9 @@ class Test{
     runTestAndReturnValue(){
         let calculatedResult = this.expressionEvaluator(this.expression)
         let evaluateAndReturnResult = function(evaluated, expected) {
-            console.log(evaluated); console.log(expected)
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
-        console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
+        console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold; padding: 5px;')
         if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
             return evaluateAndReturnResult(calculatedResult, this.expectedResult)
         } else {
@@ -207,13 +206,94 @@ let testCase26= {
     expectedResult: false
 }
 
-let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
-                    testCase6, testCase7, testCase9, testCase10, testCase11, 
-                    testCase12, testCase13, testCase14, testCase15, testCase16,
-                    testCase17, testCase18, testCase19, testCase20, testCase21,
-                    testCase22, testCase23, testCase24, testCase25, testCase26
-                ];
-// let allTestCases = [testCase1, testCase2, testCase3];
+// let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
+//                     testCase6, testCase7, testCase9, testCase10, testCase11, 
+//                     testCase12, testCase13, testCase14, testCase15, testCase16,
+//                     testCase17, testCase18, testCase19, testCase20, testCase21,
+//                     testCase22, testCase23, testCase24, testCase25, testCase26
+//                 ];
+
+let testCaseA = {
+    name: '2 => valid',
+    expression: '2',
+    expectedResult: true
+}
+let testCaseB = {
+    name: '+2 => valid',
+    expression: '+2',
+    expectedResult: true
+}
+let testCaseC = {
+    name: '2 => valid',
+    expression: '2',
+    expectedResult: true
+}
+let testCaseD = {
+    name: '34d+ => not valid',
+    expression: '34d+',
+    expectedResult: false
+}
+let testCaseE = {
+    name: '3+ => not valid',
+    expression: '3+',
+    expectedResult: false
+}
+let testCaseF = {
+    name: '3. => valid',
+    expression: '3.',
+    expectedResult: true
+}
+let testCaseG = {
+    name: '.4 => valid',
+    expression: '.4',
+    expectedResult: true
+}
+let testCaseH = {
+    name: '3.4 => valid',
+    expression: '3.4',
+    expectedResult: true
+}
+let testCaseI = {
+    name: '3.4323.43 => not valid',
+    expression: '3.4323.43',
+    expectedResult: false
+}
+let testCaseJ = {
+    name: '(2*3)/(3--3) => valid',
+    expression: '(2*3)/(3--3)',
+    expectedResult: true
+}
+let testCaseK = {
+    name: '(2*3.43)/(3.4--3.5) => valid',
+    expression: '(2*3.43)/(3.4--3.5)',
+    expectedResult: true
+}
+let testCaseL = {
+    name: ')/(3.4--3.5) => not valid',
+    expression: ')/(3.4--3.5)',
+    expectedResult: false
+}
+let testCaseM = {
+    name: '(3.4--3.5 => not valid',
+    expression: '(3.4--3.5',
+    expectedResult: false
+}
+let testCaseN = {
+    name: '3.45*)5.4+44.34(-(5+6)*4 => not valid',
+    expression: '3.45*)5.4+44.34(-(5+6)*4',
+    expectedResult: false
+}
+let testCaseO = {
+    name: '3+(.)-4 => not valid',
+    expression: '3+(.)-4',
+    expectedResult: false    
+}
+
+
+let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE,
+    testCaseF, testCaseG, testCaseH, testCaseI, testCaseJ, 
+    testCaseK, testCaseL, testCaseM, testCaseN, testCaseO
+];
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
@@ -230,13 +310,11 @@ function stringToElement(htmlString){
     let placer = new TestResultPlacer('result')
     let validator = new StringExpressionValidator()
     let validate = function(expressionAsString) { 
-        console.log(expressionAsString)
         return validator.validate(expressionAsString)
     }
-    let comparationMethod = evaluator
+    let comparationMethod = validate
 
     for (let tc of allTestCases){
-        console.log(tc.expression)
         let testCase = new Test(tc.name, tc.expression, tc.expectedResult, validate)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
