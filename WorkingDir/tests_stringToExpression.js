@@ -213,7 +213,7 @@ let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5,
                     testCase17, testCase18, testCase19, testCase20, testCase21,
                     testCase22, testCase23, testCase24, testCase25, testCase26
                 ];
-// let allTestCases = [testCase1, testCase2, testCase3];
+
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
