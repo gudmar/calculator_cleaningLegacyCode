@@ -7,50 +7,17 @@ class StringExpressionValidator{
         this.stringOfExpressionsSymbolicTypes = ''
     }
 
-
-
     validate(stringExpression){
         this.resetFlags();
-        let arrayOfBooleanResults = Array.from(stringExpression).map(this._procesSingleCharacter.bind(this))
+        let arrayOfBooleanResults = Array.from(stringExpression.trim()).map(this._procesSingleCharacter.bind(this))
         
         let output = arrayOfBooleanResults.reduce((acc, result, index) => {
             if (index == 0) {acc = result}
             return acc && result
         })
-        console.log(this.stringOfExpressionsSymbolicTypes)
+        // console.log(this.stringOfExpressionsSymbolicTypes)
         this.stringOfExpressionsSymbolicTypes = '';
         return output
-    }
-
-    resetFlags(){
-        this.isNumberProcessed = false;
-        this.wasADotInCurrentlyProcessedNumber = false;
-        
-    }
-
-    areAllConditionsFromArrayMet(arrayOfBooleans) {
-        return arrayOfBooleans.reduce((acc, result, index) => {
-            if (index == 0) {acc = result}
-            return acc && result
-        })
-    }
-
-    getSymbolicTypeOfElement(character) {
-        // console.log(character)
-            if (this.isCharacterADigit(character) || character == '.') return 'n'
-            if (this.isCharacterIn('+-/*()', character)) return character;
-            if (character == ' ') return 's';
-            if (character == undefined) return 'u';
-            return 'x'
-        }
-    
-
-    getSymbolicTypeOfCharacterAtPosition(index) {
-        return index < 0 || index >= this.stringOfExpressionsSymbolicTypes.length ? null : this.stringOfExpressionsSymbolicTypes[index]
-    }
-
-    recordSymbolicType(typeToRecord) {
-        this.stringOfExpressionsSymbolicTypes = this.stringOfExpressionsSymbolicTypes + typeToRecord
     }
 
     _procesSingleCharacter(character, index, expression){
@@ -126,6 +93,18 @@ class StringExpressionValidator{
             return true
         }.bind(this)
 
+
+        let checkIfThereAreOnlyAllowedPatterns = function() {
+            if (isLastCharacter) {
+                let arrayOfNotAllowedPatterns = [
+                    '//', '**', '/*', '*/', '-/', '+/', '+*', '-*', ')n', 'n(', ')(', 'nn'
+                ]
+                return this.isAnyOfGivenPattrnsInString(this.stringOfExpressionsSymbolicTypes, arrayOfNotAllowedPatterns)
+            }
+            return true
+        }.bind(this)
+
+
         let ifNumberIsProcessedIsItStillValid = function(character){          
             if(this.isCharacterADigit(character) || character == '.') {
                 this.isNumberProcessed = true;
@@ -164,15 +143,54 @@ class StringExpressionValidator{
             ifNumberIsProcessedIsItStillValid(character),
             isADotNotStandAlone(),
             checkIfNrAndOrderOfBracketsIsCorrect(),
-            addNextElementToArrayOfSymbolicTypesIfNeeded()
-
+            addNextElementToArrayOfSymbolicTypesIfNeeded(),
+            checkIfThereAreOnlyAllowedPatterns()
         ]
 
-        console.log(arrayOfRules)
-        
-
+        // console.log(arrayOfRules)
         return this.areAllConditionsFromArrayMet(arrayOfRules)
+    }
 
+
+    resetFlags(){
+        this.nrOfClosingBrackets = 0;
+        this.nrOfOpeningBrackets = 0;
+        this.isNumberProcessed = false;
+        this.wasADotInCurrentlyProcessedNumber = false;   
+    }
+
+
+    areAllConditionsFromArrayMet(arrayOfBooleans) {
+        return arrayOfBooleans.reduce((acc, result, index) => {
+            if (index == 0) {acc = result}
+            return acc && result
+        })
+    }
+
+
+    getSymbolicTypeOfElement(character) {
+            if (this.isCharacterADigit(character) || character == '.') return 'n'
+            if (this.isCharacterIn('+-/*()', character)) return character;
+            if (character == ' ') return 's';
+            if (character == undefined) return 'u';
+            return 'x'
+        }
+    
+
+    getSymbolicTypeOfCharacterAtPosition(index) {
+        return index < 0 || index >= this.stringOfExpressionsSymbolicTypes.length ? null : this.stringOfExpressionsSymbolicTypes[index]
+    }
+
+    
+    recordSymbolicType(typeToRecord) {
+        this.stringOfExpressionsSymbolicTypes = this.stringOfExpressionsSymbolicTypes + typeToRecord
+    }
+
+    isAnyOfGivenPattrnsInString(stringToCheck, arrayOfPatterns){
+        for (let pattern of arrayOfPatterns){
+            if (stringToCheck.indexOf(pattern) != -1) return false
+        }
+        return true
     }
 
 
@@ -193,11 +211,6 @@ class StringExpressionValidator{
     isCharacterIn(charactersChain, character){
         return charactersChain.indexOf(character) != -1
     }
-
-    isCharacterSupported(character) {
-        return isCharacterIn(allowedCharacters, character)
-    }
-
 
 
     isCharacterLegal(character) {

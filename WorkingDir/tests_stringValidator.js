@@ -294,22 +294,80 @@ let testCaseP = {
     expectedResult: true    
 }
 let testCaseR = {
-    name: '(3 + 4 3) * 5 5',
+    name: '(3 + 4 3) * 5 5 => not valid',
     expression: '(3 + 4 3) * 5 5',
     expectedResult: false
 }
-let testCaseT = {
-    name: '4/-5 => not valid',
+let testCaseS = {
+    name: '4/-5 => valid',
     expression: '4/-5',
+    expectedResult: true
+}
+let testCaseT = {
+    name: '4-/5 => not valid',
+    expression: '4-/5',
+    expectedResult: false
+}
+let testCaseU = {
+    name: '4.43//5.44 => not valid',
+    expression: '4.43//5.44',
+    expectedResult: false
+}
+let testCaseW = {
+    name: '(4-5.43)(4-5) => not valid',
+    expression: '(4-5.43)(4-5)',
+    expectedResult: false
+}
+let testCaseX = {
+    name: '+-+-++-- => not valid',
+    expression: '+-+-++--',
+    expectedResult: false
+}
+let testCaseY = {
+    name: '34-43- => not valid',
+    expression: '34-43-',
+    expectedResult: false
+}
+let testCaseZ = {
+    name: '123123-433243+(243.5342 / 43242) => valid',
+    expression: '123123-433243+(243.5342 / 43242)',
+    expectedResult: true
+}
+let testCaseAA = {
+    name: '    234-4432    => valid [spaces at one or both sides]',
+    expression: '    234-4432    ',
+    expectedResult: true
+}
+let testCaseAB = {
+    name: '.=> not valid',
+    expression: '.',
+    expectedResult: false
+}
+let testCaseAC = {
+    name: '5-=> not valid',
+    expression: '.',
+    expectedResult: false
+}
+let testCaseAD = {
+    name: '-.=> not valid',
+    expression: '-.',
     expectedResult: false
 }
 
-// let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE,
-//     testCaseF, testCaseG, testCaseH, testCaseI, testCaseJ, 
-//     testCaseK, testCaseL, testCaseM, testCaseN, testCaseO, testCaseP, testCaseR, testCaseT
-// ];
 
-let allTestCases = [testCaseJ]
+
+
+
+
+let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE,
+    testCaseF, testCaseG, testCaseH, testCaseI, testCaseJ,
+    testCaseK, testCaseL, testCaseM, testCaseN, testCaseO, 
+    testCaseP, testCaseR, testCaseS, testCaseT, testCaseU, 
+    testCaseW, testCaseX, testCaseY, testCaseZ, testCaseAA,
+    testCaseAB, testCaseAC, testCaseAD
+];
+
+// let allTestCases = [testCaseJ]
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
