@@ -2,7 +2,8 @@
 
 
 var c = displayController("display");  // This way I create a object of functions with a lexical context of "toDisplay"
-var converter = stringToExpression;
+var converterInstance = new StringToExpression()
+var converter = converterInstance;
 var finalResult = function() {
 	try {
 		var i2p = infix2prefix(converter(c.readFromDisplay()));

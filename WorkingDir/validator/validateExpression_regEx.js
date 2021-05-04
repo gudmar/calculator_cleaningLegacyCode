@@ -45,4 +45,14 @@ class StringExpressionValidator{
         return nrOfClosingBractets != nrOfOpeningBrackets ? false : true
     }
 
+    isCharacterIn(charactersChain, character){  // For inheritance purposses - stringToExpression.js
+        return charactersChain.indexOf(character) != -1
+    }
+    isDigitOrOneOfCharacters(characterChain, character){
+        return this.isCharacterADigit(character) || this.isCharacterIn(characterChain, character)
+    }
+    isCharacterADigit(character) {
+        return !isNaN(parseInt(character))
+    }
+
 }
