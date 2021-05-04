@@ -235,8 +235,10 @@ function stringToElement(htmlString){
     let placer = new TestResultPlacer('result')
     let evaluator = function(expressionAsString) { 
         console.log(expressionAsString)
-        let converter = stringToExpression;
-        return evaluate(infix2prefix(converter(expressionAsString)))
+        let converterInstance = new StringToExpression()
+        let converter = converterInstance;
+        console.log(converter.convert(expressionAsString))
+        return evaluate(infix2prefix(converter.convert(expressionAsString)))
     }
     let comparationMethod = evaluator
 
