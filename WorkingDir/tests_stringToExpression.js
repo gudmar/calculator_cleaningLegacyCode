@@ -67,6 +67,7 @@ class Test{
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
         console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
+        return evaluateAndReturnResult(calculatedResult.toString(), this.expectedResult.toString())
         if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
             return evaluateAndReturnResult(calculatedResult, this.expectedResult)
         } else {
@@ -84,7 +85,7 @@ let testCase1 = {
 let testCase2 = {
     name: '(2 + 2)',
     expression: '(2+2)',
-    expectedResult: [2, '+', 2].toString()    
+    expectedResult: ['(', 2, '+', 2, ')'].toString()    
 }
 let testCase3 = {
     name: '-2',
@@ -117,9 +118,9 @@ let testCase8 = {
     expectedResult: [-3].toString()    
 }
 let testCase9 = {
-    name: '(2+3)-(4)',
-    expression: '(2+3)-(4)',
-    expectedResult: ['(', 2, '+', 3, ')', '-', '(', 4, ')'].toString()    
+    name: '(2+3)-(4.3)',
+    expression: '(2+3)-(4.3)',
+    expectedResult: ['(', 2, '+', 3, ')', '-', '(', 4.3, ')'].toString()    
 }
 let testCase10 = {
     name: 'd',
@@ -134,12 +135,12 @@ let testCase11 = {
 let testCase12 = {
     name: '.23',
     expression: '.23',
-    expectedResult: 'error'
+    expectedResult: '0.23'
 }
 let testCase13 = {
     name: '23.',
     expression: '23.',
-    expectedResult: [23].toString()
+    expectedResult: '23'
 }
 let testCase14 = {
     name: '*2',
@@ -163,7 +164,7 @@ let testCase17 = {
 }
 let testCase18 = {
     name: '2.34+-3.4',
-    expression: '2.34+-3.5',
+    expression: '2.34+-3.4',
     expectedResult: [2.34, '+', -3.4].toString()    
 }
 let testCase19 = {
@@ -194,25 +195,32 @@ let testCase23 = {
 let testCase24 = {
     name: '2-(+3-(-4+-5))',
     expression: '2-(+3-(-4+-5))',
-    expectedResult: [2, '-', '(', '+', 3, '-', '(', '-', 4, '+', -5, ')'].toString()    
+    expectedResult: [2, '-', '(', 3, '-', '(', '-4', '+', -5, ')', ')'].toString()    
 }
 let testCase25 = {
     name: '2.1-(+3.1-(-4.1+-5.1))',
     expression: '2.1-(+3.1-(-4.1+-5.1))',
-    expectedResult: [2.1, '-', '(', '+', 3.1, '-', '(', '-', 4.1, '+', -5.1, ')'].toString()    
+    expectedResult: [2.1, '-', '(', 3.1, '-', '(', -4.1, '+', -5.1, ')', ')'].toString()    
 }
 let testCase26= {
     name: '2-',
     expression: '2-',
     expectedResult: 'error'    
 }
+let testCase27 = {
+    name: '(2+3)-+-+-(4)',
+    expression: '(2+3)-+-+-(4)',
+    expectedResult: ['(', 2, '+', 3, ')', '-', '(', 4, ')'].toString()    
+}
 
 let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
                     testCase6, testCase7, testCase9, testCase10, testCase11, 
                     testCase12, testCase13, testCase14, testCase15, testCase16,
                     testCase17, testCase18, testCase19, testCase20, testCase21,
-                    testCase22, testCase23, testCase24, testCase25, testCase26
+                    testCase22, testCase23, testCase24, testCase25, testCase26, testCase27
                 ];
+
+// let allTestCases = [ testCase9]
 
 
 function getPassRatio(){
@@ -228,16 +236,14 @@ function stringToElement(htmlString){
 
 (function runTestAndPlaceResults() {
     let placer = new TestResultPlacer('result')
-    let evaluator = function(expressionAsString) { 
+    let testedFunction = function(expressionAsString) { 
         console.log(expressionAsString)
-        let converter = stringToExpression;
-        return stringToExpression(expressionAsString)
+        let converter = new StringToExpression();
+        return converter.convert(expressionAsString)
     }
-    let comparationMethod = evaluator
 
     for (let tc of allTestCases){
-        console.log(tc.expression)
-        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, evaluator)
+        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, testedFunction)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
 
