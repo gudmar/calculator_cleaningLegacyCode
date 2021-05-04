@@ -75,137 +75,6 @@ class Test{
 }
 
 
-let testCase1 = {
-    name: '2 + 2',
-    expression: '2+2',
-    expectedResult: true
-}
-let testCase2 = {
-    name: '(2 + 2)',
-    expression: '(2+2)',
-    expectedResult: true
-}
-let testCase3 = {
-    name: '-2',
-    expression: '-2',
-    expectedResult: true
-}
-let testCase4 = {
-    name: '-2-3',
-    expression: '-2-3',
-    expectedResult: true
-}
-let testCase5 = {
-    name: '--2',
-    expression: '--2',
-    expectedResult: true
-}
-let testCase6 = {
-    name: '+2',
-    expression: '+2',
-    expectedResult: true
-}
-let testCase7 = {
-    name: '+++2',
-    expression: '+++2',
-    expectedResult: true
-}
-let testCase8 = {
-    name: '--++-3',
-    expression: '--++-3',
-    expectedResult: true
-}
-let testCase9 = {
-    name: '(2+3)-(4)',
-    expression: '(2+3)-(4)',
-    expectedResult: true
-}
-let testCase10 = {
-    name: 'd',
-    expression: 'd',
-    expectedResult: false
-}
-let testCase11 = {
-    name: '2.3.4',
-    expression: '2.3.4',
-    expectedResult: false
-}
-let testCase12 = {
-    name: '.23',
-    expression: '.23',
-    expectedResult: false
-}
-let testCase13 = {
-    name: '23.',
-    expression: '23.',
-    expectedResult: true
-}
-let testCase14 = {
-    name: '*2',
-    expression: '*2',
-    expectedResult: false
-}
-let testCase15 = {
-    name: '3/-2',
-    expression: '3/-2',
-    expectedResult: true
-}
-let testCase16 = {
-    name: '2-/3',
-    expression: '2-/3',
-    expectedResult: false
-}
-let testCase17 = {
-    name: '34.4235',
-    expression: '34.4235',
-    expectedResult: true
-}
-let testCase18 = {
-    name: '2.34+-3.4',
-    expression: '2.34+-3.5',
-    expectedResult: true
-}
-let testCase19 = {
-    name: '2--3',
-    expression: '2--3',
-    expectedResult: true
-}
-let testCase20 = {
-    name: '2-+3',
-    expression: '2-+3',
-    expectedResult: true
-}
-let testCase21 = {
-    name: '2++3',
-    expression: '2++3',
-    expectedResult: true
-}
-let testCase22 = {
-    name: '2+++3',
-    expression: '2+++3',
-    expectedResult: true
-}
-let testCase23 = {
-    name: '2---3',
-    expression: '2---3',
-    expectedResult: true
-}
-let testCase24 = {
-    name: '2-(+3-(-4+-5))',
-    expression: '2-(+3-(-4+-5))',
-    expectedResult: true
-}
-let testCase25 = {
-    name: '2.1-(+3.1-(-4.1+-5.1))',
-    expression: '2.1-(+3.1-(-4.1+-5.1))',
-    expectedResult: true
-}
-let testCase26= {
-    name: '2-',
-    expression: '2-',
-    expectedResult: false
-}
-
 // let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
 //                     testCase6, testCase7, testCase9, testCase10, testCase11, 
 //                     testCase12, testCase13, testCase14, testCase15, testCase16,
@@ -384,6 +253,7 @@ function stringToElement(htmlString){
     let placer = new TestResultPlacer('result')
     let validator = new StringExpressionValidator()
     let validate = function(expressionAsString) { 
+        console.log(validator.validate(expressionAsString))
         return validator.validate(expressionAsString)
     }
     let comparationMethod = validate
