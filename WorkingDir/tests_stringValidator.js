@@ -258,10 +258,13 @@ function stringToElement(htmlString){
     }
     let comparationMethod = validate
 
+    let timeStamp0 = performance.now();
     for (let tc of allTestCases){
         let testCase = new Test(tc.name, tc.expression, tc.expectedResult, validate)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
+    let timeStamp1 = performance.now();
+    console.log(`%cExecution of tests took ${timeStamp1 - timeStamp0} ms`, 'background-color: green; color: white; padding: 5px; border-radius: 5px;')
 
 })()
 

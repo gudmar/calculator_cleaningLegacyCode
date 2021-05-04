@@ -241,11 +241,13 @@ function stringToElement(htmlString){
         let converter = new StringToExpression();
         return converter.convert(expressionAsString)
     }
-
+    let timeStamp0 = performance.now();
     for (let tc of allTestCases){
         let testCase = new Test(tc.name, tc.expression, tc.expectedResult, testedFunction)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
+    let timeStamp1 = performance.now();
+    console.log(`%cExecution of tests took ${timeStamp1 - timeStamp0} ms`, 'background-color: green; color: white; padding: 5px; border-radius: 5px;')
 
 })()
 
