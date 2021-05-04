@@ -26,7 +26,6 @@ class StringToExpression extends StringExpressionValidator{
 		let getNextCharacter = function(){return isLastCharacter() ? null : strInput[index + 1]}
 		let getLastCharacter = function(){return isFirstCharacter() ? null : strInput[index - 1]}
 		let addCharacterToProcessedNumber = function() {this.processedNumber = this.processedNumber + character}.bind(this)
-		let addMinusIfNeeded = function() {if (this.nrOfMinus % 2 > 0) {this.result.push('-'); this.nrOfMinus = 0}}.bind(this)
 
 		if (this.isCharacterIn('+-', character)) {
 			console.log(getLastCharacter())
@@ -53,7 +52,7 @@ class StringToExpression extends StringExpressionValidator{
 
 		if (this.isCharacterIn('/*()', character)) {
 			console.log('I am in */()')
-			addMinusIfNeeded();
+			if (this.nrOfMinus % 2 > 0) {this.result.push('-'); this.nrOfMinus = 0}
 			this.finalizeNumberConversion();
 			this.result.push(character);
 		}
