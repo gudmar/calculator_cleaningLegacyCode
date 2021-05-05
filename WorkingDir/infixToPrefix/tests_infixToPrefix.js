@@ -66,6 +66,7 @@ class Test{
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
         console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold; padding: 5px;')
+        // console.log(this.expectedResult.toString())
         return evaluateAndReturnResult(calculatedResult.toString(), this.expectedResult.toString())
         if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
             return evaluateAndReturnResult(calculatedResult, this.expectedResult)
@@ -100,11 +101,14 @@ let testCaseC = {
 }
 let testCaseD = {
     name: '((3-2)*(3+2)+5)/(3+6+2-1)',
-    expression: ['(', '(', '3', '-', '2', ')', '*', '(+', '3', '+', '2', ')', '+', '5', ')', '/', '(', '3', '+', '6', '+', '2', '-', '1', ')'],
-    expectedResult: ['+', '*', '-', '3', '2', '+', '3', '2', '5', '-', '+', '+', '3', '6', '2', '1']
+    expression: ['(', '(', '3', '-', '2', ')', '*', '(', '3', '+', '2', ')', '+', '5', ')', '/', '(', '3', '+', '6', '+', '2', '-', '1', ')'],
+    expectedResult: ['/', '+', '*', '-', '3', '2', '+', '3', '2', '5', '+', '3', '+', '6', '-', '2', '1']
 }
+// /+*-32+325+3+6-21
+// /+*-32+325-++3621
 
-console.warn('Go to https://raj457036.github.io/Simple-Tools/prefixAndPostfixConvertor.html  for check. THis is not a valid sollution')
+//  https://raj457036.github.io/Simple-Tools/prefixAndPostfixConvertor.html  - This one contains a bug)
+//  https://www.web4college.com/converters/infix-to-postfix-prefix.php  - this one works
 
 
 
@@ -117,7 +121,8 @@ console.warn('Go to https://raj457036.github.io/Simple-Tools/prefixAndPostfixCon
 //     testCaseAB, testCaseAC, testCaseAD
 // ];
 
-let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD]
+// let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD]
+let allTestCases = [testCaseD]
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
@@ -134,8 +139,9 @@ function stringToElement(htmlString){
     let placer = new TestResultPlacer('result')
     let infixToPrefixConverter = infix2prefix;
     let validate = function(expressionAsString) { 
-        console.log(infixToPrefixConverter(expressionAsString))
-        return infixToPrefixConverter(expressionAsString)
+        let result = infixToPrefixConverter(expressionAsString) 
+        console.log(result)
+        return result
     }
     let comparationMethod = validate
 

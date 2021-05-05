@@ -37,8 +37,8 @@ function infix2prefix(inputList) {
 		let isANumber = function(val) { return !isNaN(Number(val))}
 		let pushItemToBeginingOfList = function(item) {outList.unshift(item)}
 
-		let repeatCallbackAsLongAsConditionIsMet = function(callback, condition, onErrorBeforeEachCall = () => {}){
-			while (condition()) {
+		let repeatCallbackAsLongAsConditionIsMet = function(callback, conditionCallback, onErrorBeforeEachCall = () => {}){
+			while (conditionCallback()) {
 				onErrorBeforeEachCall();
 				callback()
 			}
@@ -49,12 +49,14 @@ function infix2prefix(inputList) {
 		let isStackTopOperatorsPrioGreaterEqualThenCurrentElementsPrio = function(){
 			return isOperator(stackPeep()) && (getSymbolPriority(stackPeep()) >= getSymbolPriority(currentItem))
 		}
+
+		let isStackNotEmpty = function() {return stack.length > 1}
 		
-		console.log(`currentItem: ${currentItem}`)
-		console.log('index : ' + i)
-		console.log(stack); 
-		console.log(outList)
-		console.log(inLst)
+		// console.log(`currentItem: ${currentItem}`)
+		// console.log('index : ' + i)
+		// console.log(stack); 
+		// console.log(outList)
+		// console.log(listOfItems)
 
 		if (isANumber(currentItem)) {
 			pushItemToBeginingOfList(currentItem)
@@ -65,25 +67,25 @@ function infix2prefix(inputList) {
 			stack.push(currentItem)
 		} else if (currentItem == '(') {
 			repeatCallbackAsLongAsConditionIsMet(popFromStackUnshiftToList, ()=>{return stackPeep() != ')'}, throwSyntaxErrorCloseBracketMissing)
+			// console.log('%c Stack before poppoing ) ', 'background-color: yellow');
+			// console.log(stack)
 			stack.pop();
+			// console.log('Stack after popoing')
+			// console.log(stack)
 		}
 		if ((i == listOfItems.length - 1) && (stack.length > 1)) {
-			repeatCallbackAsLongAsConditionIsMet(popFromStackUnshiftToList(), () => {stack.length > 1})
+			repeatCallbackAsLongAsConditionIsMet(popFromStackUnshiftToList, isStackNotEmpty)
 		}
 	}
 	
 	try {
 		let listCopy = [...inputList]
 		listCopy.reverse()
-		console.log(listCopy)
+		// console.log(listCopy)
 		listCopy.forEach(processEachInputItem)
-		// for (let id = 0; id < listCopy.length; id++){
-		// 	debugger
-		// 	processEachInputItem(inputList[id], id, inputList)
-		// }
-		console.log(outList)
+		// console.log(outList)
 		return outList;
-	} // try
+	}
 	catch(err) {
 	
 		return err;
