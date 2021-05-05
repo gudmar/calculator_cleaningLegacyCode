@@ -1,7 +1,8 @@
 function infix2prefix(inputList) {
 	var stack = ["$"],
-		outList = [],
-		inLst = inputList.unshift("$");   // BUG MISUNDERSTANDING   inLst == 4, UNSHIFT returns a length of new list
+		outList = [];
+		// inLst = inputList.unshift("$");   // BUG MISUNDERSTANDING   inLst == 4, UNSHIFT returns a length of new list
+		inLst = inputList
 	
 	var special = "()+-x/*";
 	var priorities = { "+": 10,
@@ -48,6 +49,12 @@ function infix2prefix(inputList) {
 		let isStackTopOperatorsPrioGreaterEqualThenCurrentElementsPrio = function(){
 			return isOperator(stackPeep()) && (getSymbolPriority(stackPeep()) >= getSymbolPriority(currentItem))
 		}
+		
+		console.log(`currentItem: ${currentItem}`)
+		console.log('index : ' + i)
+		console.log(stack); 
+		console.log(outList)
+		console.log(inLst)
 
 		if (isANumber(currentItem)) {
 			pushItemToBeginingOfList(currentItem)
@@ -66,7 +73,14 @@ function infix2prefix(inputList) {
 	}
 	
 	try {
-		inputList.reverse().forEach(processEachInputItem)
+		let listCopy = [...inputList]
+		listCopy.reverse()
+		console.log(listCopy)
+		listCopy.forEach(processEachInputItem)
+		// for (let id = 0; id < listCopy.length; id++){
+		// 	debugger
+		// 	processEachInputItem(inputList[id], id, inputList)
+		// }
 		console.log(outList)
 		return outList;
 	} // try
