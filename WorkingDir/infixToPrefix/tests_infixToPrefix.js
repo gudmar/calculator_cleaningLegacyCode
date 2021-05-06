@@ -104,25 +104,27 @@ let testCaseD = {
     expression: ['(', '(', '3', '-', '2', ')', '*', '(', '3', '+', '2', ')', '+', '5', ')', '/', '(', '3', '+', '6', '+', '2', '-', '1', ')'],
     expectedResult: ['/', '+', '*', '-', '3', '2', '+', '3', '2', '5', '+', '3', '+', '6', '-', '2', '1']
 }
-// /+*-32+325+3+6-21
-// /+*-32+325-++3621
+let testCaseE = {
+    name: '(1+(2+(3-(4*(5-6)/7)-8)/9)-0)',
+    expression: ['(','1','+','(','2','+','(','3','-','(','4','*','(','5','-','6',')','/','7',')','-','8',')','/','9',')','-','0',')'],
+    expectedResult: ['+','1','-','+','2','/','-','3','-','*','4','/','-','5','6','7','8','9','0']
+}
+let testCaseF = {
+    name: '(1+2)*(3-4)/(5+6)*(7+8)/9',
+    expression: ['(','1','+','2',')','*','(','3','-','4',')','/','(','5','+','6',')','*','(','7','+','8',')','/','9'],
+    expectedResult: ['*','+','1','2','/','-','3','4','*','+','5','6','/','+','7','8','9']
+}
+let testCaseG = {
+    name: '1+2+3+4+6+7+8+9+0+11',
+    expression: ['1','+','2','+','3','+','4','+','6','+','7','+','8','+','9','+','0','+','11'],
+    expectedResult: ['+','1','+','2','+','3','+','4','+','6','+','7','+','8','+','9','+','0','11']
+}
 
 //  https://raj457036.github.io/Simple-Tools/prefixAndPostfixConvertor.html  - This one contains a bug)
 //  https://www.web4college.com/converters/infix-to-postfix-prefix.php  - this one works
 
 
-
-
-// let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE,
-//     testCaseF, testCaseG, testCaseH, testCaseI, testCaseJ,
-//     testCaseK, testCaseL, testCaseM, testCaseN, testCaseO, 
-//     testCaseP, testCaseR, testCaseS, testCaseT, testCaseU, 
-//     testCaseW, testCaseX, testCaseY, testCaseZ, testCaseAA,
-//     testCaseAB, testCaseAC, testCaseAD
-// ];
-
-// let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD]
-let allTestCases = [testCaseD]
+let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE, testCaseF, testCaseG]
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
