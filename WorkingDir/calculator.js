@@ -17,6 +17,31 @@ var finalResult = function() {
 		}
 }
 
+class Calculator{
+	constructor(){
+		this.validator = new StringExpressionValidator()
+		this.infixToPrefixConverter = new InfixToPrefix();
+		this.expressionStringToListConverter = new StringToExpression();
+	}
+	validateExpression(expressionAsString){
+		return this.validator.validate(expressionAsString)
+	}
+	convertInfixToPrefix(expressionAsListOfCharacters) {
+		return this.infixToPrefixConverter.convert(expressionAsListOfCharacters)
+	}
+	convertStingToListOfChars(expressionAsString) {
+		return this.expressionStringToListConverter.convert(expressionAsString)
+	}
+	compute(expressionAsString){
+		if (!this.validateExpression(expressionAsString)) return 'Error'
+		let expressionAsList = this.convertStingToListOfChars(expressionAsString);
+		let expressionInPrefixNotation = this.convertInfixToPrefix(expressionAsList)
+		console.log(expressionAsList)
+		console.log(expressionInPrefixNotation)
+		return evaluate(expressionInPrefixNotation.map((item)=>{return isNaN(item)?item:parseFloat(item)}))
+	}
+}
+
 
 
 
@@ -27,13 +52,10 @@ function evaluate(inputList) {
 	var elementA = 0,
 		elementB = 0,
 		partialResult = 0;  // elements for operations on values from stack
-	
-	function isOperand(arg) {
-		var result = false;
-		if (operators.indexOf(arg) === -1) { return true; }
-		else { return false; }
-	} // isOperator
-	
+	let isOperator = function(character) {return Array.from(operators).indexOf(character) == -1 ? false : true}
+	let isOperand = function(character) { return !isOperator(character)}
+	console.log(inputList.toString());
+		
 	function myEval(arg1, arg2, op) {
 		var result = 0;
 		switch(op) {
@@ -52,6 +74,7 @@ function evaluate(inputList) {
 			case "*":
 				result = arg1 * arg2;
 		} // switch
+		console.log(result)
 		return result;		
 	}  // myEval
 	
@@ -63,8 +86,9 @@ function evaluate(inputList) {
 			else {
 				elementA = operandStack.pop();
 				elementB = operandStack.pop();
+				console.log(elementA); console.log(elementB)
 				partialResult = myEval(elementB, elementA, inputList[i]); 
-				console.log("PARTIAL RESULT : ", partialResult);
+				console.log(`PARTIAL RESULT: ${elementA} ${inputList[i]} ${elementB} : ${partialResult}`);
 				if (isNaN(partialResult)) { throw "syntaxError";}
 				operandStack.push(partialResult);	
 			}// else  -> if isOperand(inputList...

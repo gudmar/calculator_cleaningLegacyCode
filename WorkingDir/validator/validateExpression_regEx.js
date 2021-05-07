@@ -1,5 +1,5 @@
 class StringExpressionValidator{
-    constructor(stringExpression){
+    constructor(){
 
     }
 

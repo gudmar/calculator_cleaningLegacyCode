@@ -25,7 +25,7 @@ class StringToExpression extends StringExpressionValidator{
 		let addCharacterToProcessedNumber = function() {this.processedNumber = this.processedNumber + character}.bind(this)
 
 		if (this.isCharacterIn('+-', character)) {
-			if ((this.isCharacterIn('+-()/*.', getLastCharacter())) || getLastCharacter() == null) {
+			if ((this.isCharacterIn('+-(/*.', getLastCharacter())) || getLastCharacter() == null) {
 				if (character == '-') this.nrOfMinus++;
 			} else {
 				this.finalizeNumberConversion()

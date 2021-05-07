@@ -63,7 +63,6 @@ class Test{
     runTestAndReturnValue(){
         let calculatedResult = this.expressionEvaluator(this.expression)
         let evaluateAndReturnResult = function(evaluated, expected) {
-            console.log(evaluated); console.log(expected)
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
         console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
@@ -212,15 +211,25 @@ let testCase27 = {
     expression: '(2+3)-+-+-(4)',
     expectedResult: ['(', 2, '+', 3, ')', '-', '(', 4, ')'].toString()    
 }
+let testCase28 = {
+    name: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))',
+    expression: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))',
+    expectedResult: ['1','/','(','2',')','+','(','1','/','4',')','+','(','1','/','(','2','*','2','*','2',')','+','(','1','/','2','*','2','*','2','*','2',')','+','1','/','(','2','*','2','*','2','*','2','*','2',')',')'].toString()    
+}
+let testCase29 = {
+    name: '1/2*2*2*2',
+    expression: '1/2*2*2*2',
+    expectedResult: ['/','1','*','2','*','2','*','2','2'].toString()    
+}
 
 let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
                     testCase6, testCase7, testCase9, testCase10, testCase11, 
                     testCase12, testCase13, testCase14, testCase15, testCase16,
                     testCase17, testCase18, testCase19, testCase20, testCase21,
-                    testCase22, testCase23, testCase24, testCase25, testCase26, testCase27
+                    testCase22, testCase23, testCase24, testCase25, testCase26, testCase27, testCase28
                 ];
 
-// let allTestCases = [ testCase9]
+// let allTestCases = [ testCase28]
 
 
 function getPassRatio(){
@@ -237,7 +246,6 @@ function stringToElement(htmlString){
 (function runTestAndPlaceResults() {
     let placer = new TestResultPlacer('result')
     let testedFunction = function(expressionAsString) { 
-        console.log(expressionAsString)
         let converter = new StringToExpression();
         return converter.convert(expressionAsString)
     }
