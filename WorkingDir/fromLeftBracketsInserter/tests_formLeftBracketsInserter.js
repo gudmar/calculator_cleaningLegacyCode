@@ -81,11 +81,41 @@ let testCase1 = {
     expression: '1/2*3',
     expectedResult: '(1/2)*3'
 }
+let testCase10 = {
+    name: '1/2*3/4*5/6/7/8',
+    expression: '1/2*3/4*5/6/7/8',
+    expectedResult: '((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8'
+    // ((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8
+}
+let testCase11 = {
+    name: '1/2*9*3/4*5/6/7/8',
+    expression: '1/2*9*3/4*5/6/7/8',
+    expectedResult: '((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8'
+    // ((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8
+}
+
+let testCase95 = {
+    name: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10) [Brackets present: no change]',
+    expression: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)',
+    expectedResult: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)'
+}
+let testCase99 = {
+    name: '((((((1/2)*3)/4)*5)/6)/7)/8 [Brackets present: no change',
+    expression: '((((((1/2)*3)/4)*5)/6)/7)/8',
+    expectedResult: '((((((1/2)*3)/4)*5)/6)/7)/8'
+}
 let testCase100 = {
     name: '(1+2)*(3-4)*(5+6)/(7+8)*(9+10)',
     expression: '(1+2)*(3-4)*(5+6)/(7+8)*(9+10)',
     expectedResult: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)'
 }
+let testCase101 = {
+    name: '1/2*3/4*5/6/7/8',
+    expression: '1/2*3/4*5/6/7/8',
+    expectedResult: '((((((1/2)*3)/4)*5)/6)/7)/8'
+    // ((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8
+}
+
 
 
 // let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
@@ -97,7 +127,7 @@ let testCase100 = {
 
 
 
-let allTestCases = [ testCase1]
+let allTestCases = [ testCase1, testCase10, testCase11]
 
 
 function getPassRatio(){
@@ -113,15 +143,16 @@ function stringToElement(htmlString){
 
 (function runTestAndPlaceResults() {
     let placer = new TestResultPlacer('result')
+    
     let testedFunction = function(expressionAsString) { 
-        let converter = new StringToExpression();
+        let converter = new StringToExpression();    
         let bracketsAdder = new BracketsFromLeftAdderInCaseOfDivision()
         let expressionAsList = converter.convert(expressionAsString)
-        return bracketsAdder.analyzeAndAddBrackets(expressionAsList)
+        return bracketsAdder.analyzeAndAddBrackets(expressionAsList).join('')
     }
     let expectedResultConverter = function(expressionAsString){
         let converter = new StringToExpression();
-        return converter.convert(expressionAsString)
+        return converter.convert(expressionAsString).join('')
     }
     let timeStamp0 = performance.now();
     for (let tc of allTestCases){
