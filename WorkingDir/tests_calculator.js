@@ -54,23 +54,19 @@ class TestResultPlacer{
 }
 
 class Test{
-    constructor(name, expressionAsString, expectedResult, expressionEvaluator){
+    constructor(name, valueToTest, expectedResult, testedMethod){
         this.name = name;
-        this.expression = expressionAsString;
+        this.valueToTest = valueToTest;
         this.expectedResult = expectedResult;
-        this.expressionEvaluator = expressionEvaluator
+        this.testedMethod = testedMethod
     }
     runTestAndReturnValue(){
-        let calculatedResult = this.expressionEvaluator(this.expression)
+        let calculatedResult = this.testedMethod(this.valueToTest)
         let evaluateAndReturnResult = function(evaluated, expected) {
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
-        console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
-        if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
-            return evaluateAndReturnResult(calculatedResult, this.expectedResult)
-        } else {
-            return evaluateAndReturnResult(parseFloat(calculatedResult), parseFloat(this.expectedResult))
-        }
+        console.log(`%cCalculated result for ${this.valueToTest} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
+        return (evaluateAndReturnResult(calculatedResult.toString(), this.expectedResult.toString()))
     }
 }
 
@@ -141,14 +137,14 @@ let testCase13 = {
     expectedResult: '3.3333333333333335'        
 }
 let testCase14 = {
-    name: '10/-3 = Error',
+    name: '10/-3 = -3.3333333333333335',
     expression: '10/-3',
-    expectedResult: 'Error'        
+    expectedResult: '-3.3333333333333335'      
 }
 let testCase15 = {
     name: '10/(-3) = -3.3333333333333335',
     expression: '10/(-3)',
-    expectedResult: '3.3333333333333335'
+    expectedResult: '-3.3333333333333335'
 }
 let testCase16 = {
     name: '3*(-3) = -9',
@@ -156,9 +152,9 @@ let testCase16 = {
     expectedResult: '-9'
 }
 let testCase17 = {
-    name: '3*-3 = Error',
+    name: '3*-3 = -9',
     expression: '3*-3',
-    expectedResult: 'Error'
+    expectedResult: '-9'
 }
 let testCase18 = {
     name: '-3 = -3',
@@ -191,8 +187,8 @@ let testCase23 = {
     expectedResult: '-0.00002809383'    
 }
 let testCase24 = {
-    name: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2)=4.90625',
-    expression: '(3-4)*((9-8)/(10-100)*(((4-3)*(8-6))/(9-800)))',
+    name: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))=4.90625',
+    expression: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))',
     expectedResult: '4.90625'    
 }
 let testCase25 = {
@@ -210,15 +206,30 @@ let testCase27 = {
     expression: '(1-9/0)*0',
     expectedResult: 'undefined'
 }
+let testCase28 = {
+    name: '1/(2)+(1/4)+(1/(2*2*2)+(2*2*1/2*2*2*2)+1/(2*2*2*2*2))=16.90625',
+    expression: '1/(2)+(1/4)+(1/(2*2*2)+(2*2*1/2*2*2*2)+1/(2*2*2*2*2))',
+    expectedResult: '16.90625'
+}
+let testCase29 = {
+    name: '1/2*2*2*2=4',
+    expression: '1/2*2*2*2',
+    expectedResult: '4'
+}
+let testCase30 = {
+    name: '1/2/4/5=0.025',
+    expression: '1/2/4/5',
+    expectedResult: '0.025'
+}
 
-let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
-                    testCase6, testCase7, testCase9, testCase10, testCase11, 
-                    testCase12, testCase13, testCase14, testCase15, testCase16,
-                    testCase17, testCase18, testCase19, testCase20, testCase21,
-                    testCase22, testCase23, testCase24, testCase25, testCase27
-                ];
-// let allTestCases = [testCase9
-// ];
+// let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
+//                     testCase6, testCase7, testCase9, testCase10, testCase11, 
+//                     testCase12, testCase13, testCase14, testCase15, testCase16,
+//                     testCase17, testCase18, testCase19, testCase20, testCase21,
+//                     testCase22, testCase23, testCase24, testCase25, testCase27, testCase28, testCase30
+//                 ];
+let allTestCases = [testCase29
+];
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
@@ -233,18 +244,15 @@ function stringToElement(htmlString){
 
 (function runTestAndPlaceResults() {
     let placer = new TestResultPlacer('result')
-    let evaluator = function(expressionAsString) { 
-        console.log(expressionAsString)
-        let converterInstance = new StringToExpression()
-        let converter = converterInstance;
-        console.log(converter.convert(expressionAsString))
-        return evaluate(infix2prefix(converter.convert(expressionAsString)))
+    let computer = function(expressionAsString) { 
+        let calculator = new Calculator();
+        return calculator.compute(expressionAsString)
     }
-    let comparationMethod = evaluator
+    let comparationMethod = computer
 
     for (let tc of allTestCases){
         console.log(tc.expression)
-        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, evaluator)
+        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, comparationMethod)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
 

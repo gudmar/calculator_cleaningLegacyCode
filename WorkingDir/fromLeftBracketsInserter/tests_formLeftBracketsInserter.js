@@ -65,8 +65,7 @@ class Test{
         let evaluateAndReturnResult = function(evaluated, expected) {
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
-        console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold; padding: 5px;')
-        // console.log(this.expectedResult.toString())
+        console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
         return evaluateAndReturnResult(calculatedResult.toString(), this.expectedResult.toString())
         if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
             return evaluateAndReturnResult(calculatedResult, this.expectedResult)
@@ -77,68 +76,29 @@ class Test{
 }
 
 
+let testCase1 = {
+    name: '1/2*3',
+    expression: '1/2*3',
+    expectedResult: '(1/2)*3'
+}
+let testCase100 = {
+    name: '(1+2)*(3-4)*(5+6)/(7+8)*(9+10)',
+    expression: '(1+2)*(3-4)*(5+6)/(7+8)*(9+10)',
+    expectedResult: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)'
+}
+
+
 // let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
 //                     testCase6, testCase7, testCase9, testCase10, testCase11, 
 //                     testCase12, testCase13, testCase14, testCase15, testCase16,
 //                     testCase17, testCase18, testCase19, testCase20, testCase21,
-//                     testCase22, testCase23, testCase24, testCase25, testCase26
+//                     testCase22, testCase23, testCase24, testCase25, testCase26, testCase27, testCase28
 //                 ];
 
-let testCaseA = {
-    name: '2 + 2',
-    expression: ['2', '+', '2'],
-    expectedResult: ['+', '2', '2']
-}
-let testCaseB = {
-    name: '(3-2)*(3+2)',
-    expression: ['(', 3, '-', 2, ')', '*', '(', 3, '+', 2, ')'],
-    expectedResult: ["*", "-", 3, 2, "+", 3, 2]
-}
-let testCaseC = {
-    name: '(3)',
-    expression: ['(', 3, ')'],
-    expectedResult: [3]
-}
-let testCaseD = {
-    name: '((3-2)*(3+2)+5)/(3+6+2-1)',
-    expression: ['(', '(', '3', '-', '2', ')', '*', '(', '3', '+', '2', ')', '+', '5', ')', '/', '(', '3', '+', '6', '+', '2', '-', '1', ')'],
-    expectedResult: ['/', '+', '*', '-', '3', '2', '+', '3', '2', '5', '+', '3', '+', '6', '-', '2', '1']
-}
-let testCaseE = {
-    name: '(1+(2+(3-(4*(5-6)/7)-8)/9)-0)',
-    expression: ['(','1','+','(','2','+','(','3','-','(','4','*','(','5','-','6',')','/','7',')','-','8',')','/','9',')','-','0',')'],
-    expectedResult: ['+','1','-','+','2','/','-','3','-','*','4','/','-','5','6','7','8','9','0']
-}
-let testCaseF = {
-    name: '(1+2)*(3-4)/(5+6)*(7+8)/9',
-    expression: ['(','1','+','2',')','*','(','3','-','4',')','/','(','5','+','6',')','*','(','7','+','8',')','/','9'],
-    expectedResult: ['*','+','1','2','/','-','3','4','*','+','5','6','/','+','7','8','9']
-}
-let testCaseG = {
-    name: '1+2+3+4+6+7+8+9+0+11',
-    expression: ['1','+','2','+','3','+','4','+','6','+','7','+','8','+','9','+','0','+','11'],
-    expectedResult: ['+','1','+','2','+','3','+','4','+','6','+','7','+','8','+','9','+','0','11']
-}
-let testCaseH = {
-    name: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))',
-    expression: ['1','/','(','2',')','+','(','1','/','4',')','+','(','1','/','(','2','*','2','*','2',')','+','(','1','/','2','*','2','*','2','*','2',')','+','1','/','(','2','*','2','*','2','*','2','*','2',')',')'],
-    expectedResult: ['+','/','1','2','+','/','1','4','+','/','1','*','2','*','2','2','+','/','1','*','2','*','2','*','2','2','/','1','*','2','*','2','*','2','*','2','2']
-}
-let testCaseI = {
-    name: '1/2*2*2*2',
-    expression: ['1','/','2','*','2','*','2','*','2'],
-    expectedResult: ['+','/','1','2','+','/','1','4','+','/','1','*','2','*','2','2','+','/','1','*','2','*','2','*','2','2','/','1','*','2','*','2','*','2','*','2','2']
-}
-
-// 1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))
-// +/12+/14+/1*2*22+/1*2*2*22/1*2*2*2*22
 
 
-//  https://raj457036.github.io/Simple-Tools/prefixAndPostfixConvertor.html  - This one contains a bug)
-//  https://www.web4college.com/converters/infix-to-postfix-prefix.php  - this one works
+let allTestCases = [ testCase1]
 
-
-let allTestCases = [testCaseA, testCaseB, testCaseC, testCaseD, testCaseE, testCaseF, testCaseG, testCaseH]
 
 function getPassRatio(){
     let passed = document.querySelectorAll('.PASS').length;
@@ -153,17 +113,19 @@ function stringToElement(htmlString){
 
 (function runTestAndPlaceResults() {
     let placer = new TestResultPlacer('result')
-    let infixToPrefixConverter = infix2prefix;
-    let validate = function(expressionAsString) { 
-        let result = infixToPrefixConverter(expressionAsString) 
-        console.log(result)
-        return result
+    let testedFunction = function(expressionAsString) { 
+        let converter = new StringToExpression();
+        let bracketsAdder = new BracketsFromLeftAdderInCaseOfDivision()
+        let expressionAsList = converter.convert(expressionAsString)
+        return bracketsAdder.analyzeAndAddBrackets(expressionAsList)
     }
-    let comparationMethod = validate
-
+    let expectedResultConverter = function(expressionAsString){
+        let converter = new StringToExpression();
+        return converter.convert(expressionAsString)
+    }
     let timeStamp0 = performance.now();
     for (let tc of allTestCases){
-        let testCase = new Test(tc.name, tc.expression, tc.expectedResult, validate)
+        let testCase = new Test(tc.name, tc.expression, expectedResultConverter(tc.expectedResult), testedFunction)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
     let timeStamp1 = performance.now();
