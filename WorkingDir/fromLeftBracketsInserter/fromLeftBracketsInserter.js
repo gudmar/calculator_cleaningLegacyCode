@@ -24,6 +24,70 @@ class CommonToolkit{
     isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item) == -1 ? false : true}
 }
 
+class ExpressionInBracketExtractor extends CommonToolkit{
+    constructor(){
+        super()
+        this.replacedMapper = {};
+        this.lastAddedPlaceholderNumber = null;
+    }
+
+    replaceFirstLayerBrackets(expression){
+        while (this.isNextBrackets(expression)){
+            this.memorizeAndReplaceSingleMatch(expression);
+        }
+        console.log(this.replacedMapper);
+        console.log(expression)
+    }
+
+    isNextBrackets(expression){
+        return expression.indexOf('(') !=-1 ? true : false
+    }
+
+    findSingleMatch(expression){
+        let startIndex = expression.indexOf('(');
+        let bracketNestLevel = 1;
+        let currentIndex = startIndex + 1;
+        if (startIndex == -1) return null;
+        while (bracketNestLevel != 0 && currentIndex < expression.length){
+            let currentElement = expression[currentIndex];
+            if (currentElement == '(') bracketNestLevel++;
+            if (currentElement == ')') bracketNestLevel--;
+            currentIndex++;
+        }
+        let output = {
+            indexStart: startIndex,
+            indexEnd: currentIndex - 1,
+            foundSubExpression: expression.slice(startIndex, currentIndex)
+        }
+        return output;
+    }
+
+    memorizeAndReplaceSingleMatch(expression){
+        let placeholder = this.generateNextPlaceholder();
+        let match = this.findSingleMatch(expression);
+        console.log(placeholder)
+        console.log(match)
+        this.replaceSingleMatch(expression, match, placeholder);
+        this.replacedMapper[placeholder] = this.pealL1Brackets(match.foundSubExpression)
+    }
+
+    pealL1Brackets(expression) {
+        return expression.slice(1, expression.length-1)
+    }
+
+    replaceSingleMatch(expression, {indexStart, indexEnd, foundSubExpression}, newElements){
+        expression.splice(indexStart, foundSubExpression.length, newElements)
+    }
+
+    generateNextPlaceholder(){
+        if (this.lastAddedPlaceholderNumber == null) {
+            this.lastAddedPlaceholderNumber = 0; return 'p0'
+        }
+         return `p${this.lastAddedPlaceholderNumber++}`
+    }
+}
+
+
 class BracketsFromLeftAdderInCaseOfDivision extends CommonToolkit{
     constructor(){
         super()
