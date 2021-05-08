@@ -67,11 +67,11 @@ class Test{
         }
         console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
         return evaluateAndReturnResult(calculatedResult.toString(), this.expectedResult.toString())
-        if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
-            return evaluateAndReturnResult(calculatedResult, this.expectedResult)
-        } else {
-            return evaluateAndReturnResult(parseFloat(calculatedResult), parseFloat(this.expectedResult))
-        }
+        // if (isNaN(parseFloat(calculatedResult)) || isNaN(parseFloat(this.expectedResult))) {
+        //     return evaluateAndReturnResult(calculatedResult, this.expectedResult)
+        // } else {
+        //     return evaluateAndReturnResult(parseFloat(calculatedResult), parseFloat(this.expectedResult))
+        // }
     }
 }
 
@@ -126,7 +126,7 @@ let testCase101 = {
 
 
 
-// let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
+// let addingBracketsTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
 //                     testCase6, testCase7, testCase9, testCase10, testCase11, 
 //                     testCase12, testCase13, testCase14, testCase15, testCase16,
 //                     testCase17, testCase18, testCase19, testCase20, testCase21,
@@ -135,7 +135,7 @@ let testCase101 = {
 
 
 
-let allTestCases = [ testCase1, testCase10, testCase11, testCase12, testCase13]
+let addingBracketsTestCases = [ testCase1, testCase10, testCase11, testCase12, testCase13]
 
 
 function getPassRatio(){
@@ -163,7 +163,7 @@ function stringToElement(htmlString){
         return converter.convert(expressionAsString).join('')
     }
     let timeStamp0 = performance.now();
-    for (let tc of allTestCases){
+    for (let tc of addingBracketsTestCases){
         let testCase = new Test(tc.name, tc.expression, expectedResultConverter(tc.expectedResult), testedFunction)
         placer.addResult(tc.name, testCase.runTestAndReturnValue())
     }
@@ -182,3 +182,10 @@ function appendPassRatio() {
 }
 
 appendPassRatio();
+
+// ==============================  Testing extraction of first layer ============================================
+let extractor = new ExpressionInBracketExtractor()
+let converter = new StringToExpression()
+let testCaseA = converter.convert('2+(3/4)-(4*5/6)+((3+5)/(5-9))+(4-4)');
+console.log(testCaseA)
+extractor.replaceFirstLayerBrackets(testCaseA)
