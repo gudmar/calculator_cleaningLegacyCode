@@ -1,8 +1,32 @@
 // In case of 1/2*2*2*2, infix to prefix first counts 2*2*2*2 and then 1 / 16. This behavior is according to algorithm. However this is not proper math operation
 // That is why i this case (1/2)*2*2*2 should be counted
 
-class BracketsFromLeftAdderInCaseOfDivision {
+class CommonToolkit{
     constructor(){
+    }
+
+
+    isItemNumberOrIn(listString, item) { return this.isNumber(item) ? this.isNumber(item) : this.isItemIn(listString, item)}
+
+
+    insertItemAtIndex(list, item, index){ list.splice(index-1, 0, item)}
+
+
+    isNumber(item){return !isNaN(item)}
+
+
+    isOperator(item){return this.isItemIn('*/+-', item)}
+
+
+    isBracket(item){return this.isItemIn('()', item)}
+
+
+    isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item) == -1 ? false : true}
+}
+
+class BracketsFromLeftAdderInCaseOfDivision extends CommonToolkit{
+    constructor(){
+        super()
     }
 
     analyzeAndAddBrackets(expressionAsList){
@@ -11,70 +35,82 @@ class BracketsFromLeftAdderInCaseOfDivision {
         let index = 0;
         while (index < reversedExpression.length){
             let item = reversedExpression[index];
-            // debugger;
             if (item == '/'){
-                index = this.insertAllBracketsTillMultipleOrDivisionOperatorsOccure(reversedExpression, index)
+                let bracketAdder = new TillMultipleOrDivisionOperatorBracketInserter(reversedExpression, index)
+                bracketAdder.calculateExpression()
+                index = bracketAdder.getCurrentIndexAfterAddingBrackets()
+                reversedExpression = bracketAdder.getExpressionWithBrackets()
             }
 
             index++;
         }
         return reversedExpression.reverse()
     }
+}
+
+
+class TillMultipleOrDivisionOperatorBracketInserter extends CommonToolkit{
+    constructor(expressionAsList, currentIndex){
+        super()
+        this.expressionAsList = [...expressionAsList];
+        this.viewedItem = this.expressionAsList[currentIndex];
+        this.index = currentIndex;
+        this.bracketsToOpen = 0;
+        this.lastOperator = null;
+    }
+
+    getCurrentIndexAfterAddingBrackets(){
+        return this.index + this.bracketsToOpen
+    }
+
+
+    getExpressionWithBrackets(){
+        return this.expressionAsList;
+    }
+
+
+    calculateExpression(){
+        while (this.isItemNumberOrIn('*/',this.viewedItem)){
+            this.addCloseBracketIfNeeded_changeLocalState()
+            this.index++;
+            this.viewedItem = this.expressionAsList[this.index]
+        }
+        this.insertAllOpenBrackets(this.expressionAsList, this.index + 1)
+    }
+
+
+    insertCloseBracket() {
+        this.insertItemAtIndex(this.expressionAsList, ')', this.getIndexToInsertCloseBracket(this.expressionAsList, this.index + 1))
+        this.index++;
+    }
+
+
+    insertAllOpenBrackets(){
+        for(let i = 0; i < this.bracketsToOpen; i++){
+            this.insertItemAtIndex(this.expressionAsList, '(', this.index + 1)
+        }
+    }
+
 
     getIndexToInsertCloseBracket(expressionAsList, currentIndex){
         if (currentIndex == 0) return null
-        console.log(currentIndex - 1)
         return currentIndex - 1
     }
 
-    insertAllBracketsTillMultipleOrDivisionOperatorsOccure(expressionAsList, currentIndex){
-        console.log(currentIndex)
-        console.log(expressionAsList.toString())
-        
-        let insertCloseBracket = function(expressionAsList, currentIndex) {
-            this.insertItemAtIndex(expressionAsList, ')', this.getIndexToInsertCloseBracket(expressionAsList, currentIndex+1))
-            index++;
-        }.bind(this)
-        let insertAllOpenBrackets = function(expressionAsList, index){
-            // debugger
-            for(let i = 0; i < bracketsToOpen; i++){
-                this.insertItemAtIndex(expressionAsList, '(', index)
-            }
-        }.bind(this)
-        if (currentIndex == expressionAsList.length - 1) return null;
-        let viewedItem = expressionAsList[currentIndex];
-        let index = currentIndex;
-        let bracketsToOpen = 0;
-        while (this.isItemNumberOrIn('*/',viewedItem)){
-            console.log(viewedItem)
-            console.log(index)
-            // debugger
-            if (this.isItemIn('*/', viewedItem)) {
-                // debugger
-                insertCloseBracket(expressionAsList, index)
-                bracketsToOpen++
-            }
-            index = index + 1;
-            // debugger
-            viewedItem = expressionAsList[index]
-        }
-        // debugger
-        insertAllOpenBrackets(expressionAsList, index + 1)
-        // debugger
-        console.log(expressionAsList)
-        return index + bracketsToOpen
+    getPreviousOperator(){
+        return this.index < 2 ? null : this.expressionAsList[this.index - 2];
     }
 
-    isItemNumberOrIn(listString, item) { 
-        return this.isNumber(item) ? this.isNumber(item) : this.isItemIn(listString, item)
+
+    addCloseBracketIfNeeded_changeLocalState(){
+        
+        if (this.viewedItem == '*' && this.lastOperator == '*') return null
+        if (this.isItemIn('-+', this.getPreviousOperator())) return null
+        if (this.isItemIn('*/', this.viewedItem) && (this.index > 1)) {
+            console.log(this.getPreviousOperator())
+            this.lastOperator = this.expressionAsList[this.index]
+            this.insertCloseBracket()
+            this.bracketsToOpen++
+        }
     }
-    insertItemAtIndex(list, item, index){ 
-        // debugger
-        list.splice(index-1, 0, item)
-        // debugger
-    }
-    isNumber(item){return !isNaN(item)}
-    isOperator(item){return this.isItemIn('*/+-', item)}
-    isBracket(item){return this.isItemIn('()', item)}
-    isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item) == -1 ? false : true}
 }
