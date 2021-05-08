@@ -77,21 +77,29 @@ class Test{
 
 
 let testCase1 = {
-    name: '1/2*3',
+    name: '1 / 2 * 3',
     expression: '1/2*3',
     expectedResult: '(1/2)*3'
 }
 let testCase10 = {
-    name: '1/2*3/4*5/6/7/8',
+    name: ' 1 / 2 * 3 / 4 * 5 / 6 / 7 / 8 ',
     expression: '1/2*3/4*5/6/7/8',
     expectedResult: '((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8'
-    // ((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8
 }
 let testCase11 = {
-    name: '1/2*9*3/4*5/6/7/8',
+    name: '1 / 2 * 9 * 3 / 4 * 5 / 6 / 7 / 8',
     expression: '1/2*9*3/4*5/6/7/8',
     expectedResult: '((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8'
-    // ((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8
+}
+let testCase12 = {
+    name: '1 / 2 - 1 / 2 * 9 * 3 / 4 * 5 / 6 / 7 / 8 + 1 / 2 * 5 * 2',
+    expression: '1/2-1/2*9*3/4*5/6/7/8+1/2*5*2',
+    expectedResult: '1/2-((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8 + (1/2)*5*2'
+}
+let testCase13 = {
+    name: '1 / 2 - 1 / 2 * 9 * 3 / 4 * 5 / 6 / 7 / 8 + 1 * 2 * 3 / 2 * 5 * 2 - 1 * 2 / 3 + 4',
+    expression: '1/2-1/2*9*3/4*5/6/7/8+1*2*3/2*5*2-1*2/3+4',
+    expectedResult: '1/2-((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8 + ((1 * 2 * 3)/2)*5*2 - (1*2)/3 + 4'
 }
 
 let testCase95 = {
@@ -127,7 +135,7 @@ let testCase101 = {
 
 
 
-let allTestCases = [ testCase1, testCase10, testCase11]
+let allTestCases = [ testCase1, testCase10, testCase11, testCase12, testCase13]
 
 
 function getPassRatio(){
