@@ -12,7 +12,13 @@ class StringToExpression extends StringExpressionValidator{
 		let spacelessExpression = expression.replace(/\s+/g, '')
 		if (!this.validate(expression)) return 'error'
 		Array.from(spacelessExpression).forEach(this.processSingleCharacter.bind(this));
-		return this.result	
+		let output = [...this.result]
+		this.clean();
+		return output
+	}
+
+	clean(){
+		this.result = []; this.isNumberProcessed = false; this.processedNumber = ''; this.nrOfMinus = 0;
 	}
 
 

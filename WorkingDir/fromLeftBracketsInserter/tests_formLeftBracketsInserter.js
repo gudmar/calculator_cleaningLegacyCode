@@ -154,9 +154,11 @@ function stringToElement(htmlString){
     
     let testedFunction = function(expressionAsString) { 
         let converter = new StringToExpression();    
-        let bracketsAdder = new BracketsFromLeftAdderInCaseOfDivision()
+        // let bracketsAdder = new BracketsFromLeftAdderInCaseOfDivision()
+        let bracketsAdder = new NestedExpressionInserter()
         let expressionAsList = converter.convert(expressionAsString)
-        return bracketsAdder.analyzeAndAddBrackets(expressionAsList).join('')
+        return bracketsAdder.addBrackets(expressionAsList).join('')
+        // return bracketsAdder.analyzeAndAddBrackets(expressionAsList).join('')
     }
     let expectedResultConverter = function(expressionAsString){
         let converter = new StringToExpression();
@@ -186,6 +188,9 @@ appendPassRatio();
 // ==============================  Testing extraction of first layer ============================================
 let extractor = new ExpressionInBracketExtractor()
 let converter = new StringToExpression()
+// let converter1 = new StringToExpression()
 let testCaseA = converter.convert('2+(3/4)-(4*5/6)+((3+5)/(5-9))+(4-4)');
-console.log(testCaseA)
-extractor.replaceFirstLayerBrackets(testCaseA)
+console.log(extractor.replaceFirstLayerBrackets(testCaseA))
+let testCaseB = converter.convert('2/3/4/5 * 8 * 9 + 4')
+console.log(extractor.replaceFirstLayerBrackets(testCaseB))
+

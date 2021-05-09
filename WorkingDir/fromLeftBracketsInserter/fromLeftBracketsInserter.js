@@ -8,11 +8,18 @@ class CommonToolkit{
 
     isItemNumberOrIn(listString, item) { return this.isNumber(item) ? this.isNumber(item) : this.isItemIn(listString, item)}
 
+    isItemExpressionOrIn(listString, item) { return this.isExpression(item) ? this.isExpression(item) : this.isItemIn(listString, item)}
+
 
     insertItemAtIndex(list, item, index){ list.splice(index-1, 0, item)}
 
 
     isNumber(item){return !isNaN(item)}
+
+    isExpression(item) {
+        let isExpression = /p[0-9]*/.test(item)
+        return this.isNumber(item) || isExpression;
+    }
 
 
     isOperator(item){return this.isItemIn('*/+-', item)}
@@ -24,6 +31,42 @@ class CommonToolkit{
     isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item) == -1 ? false : true}
 }
 
+class NestedExpressionInserter extends CommonToolkit{
+    constructor(){
+        super()
+        this.extractor = new ExpressionInBracketExtractor();
+        this.bracketAdder = new BracketsFromLeftAdderInCaseOfDivision();
+    }
+
+    addBrackets(_expression){
+        let {expression, mappingObject} = this.extractor.replaceFirstLayerBrackets(_expression)
+        let expressionWithBrackets = this.bracketAdder.analyzeAndAddBrackets(expression)
+        let subexpressionsWithBrackets = this.getMappingObjectWithBrackets(mappingObject)
+        let output = this.replacePlaceholdersWithExpressions(expressionWithBrackets, subexpressionsWithBrackets)
+        return output
+    }
+
+    getMappingObjectWithBrackets(mappingObject) {
+        let getSingleExpressionWithBrackets = function(key){
+            return this.addBrackets(mappingObject[key])
+        }.bind(this)
+        let output = Object.keys(mappingObject).map(getSingleExpressionWithBrackets)
+        return output
+    }
+
+    replacePlaceholdersWithExpressions(expressionWithPlaceholders, mappingObject){
+        let replaceSingle = function(placeholder){
+            let pattern = new RegExp(`${placeholder}`)
+            return expressionWithPlaceholders.replace(pattern, `(${mappingObject[placeholder]})`)
+        }
+        let output = Object.keys(mappingObject).map(replaceSingle)
+        return output
+    }
+
+
+
+}
+
 class ExpressionInBracketExtractor extends CommonToolkit{
     constructor(){
         super()
@@ -31,12 +74,22 @@ class ExpressionInBracketExtractor extends CommonToolkit{
         this.lastAddedPlaceholderNumber = null;
     }
 
-    replaceFirstLayerBrackets(expression){
-        while (this.isNextBrackets(expression)){
-            this.memorizeAndReplaceSingleMatch(expression);
+    replaceFirstLayerBrackets(_expression){
+        while (this.isNextBrackets(_expression)){
+            this.memorizeAndReplaceSingleMatch(_expression);
         }
-        console.log(this.replacedMapper);
-        console.log(expression)
+        let output = {};
+        output = {
+            expression: _expression,
+            mappingObject: {...this.replacedMapper}
+        }
+        this.clean()
+        return output
+    }
+
+    clean(){
+        this.replacedMapper = {};
+        this.lastAddedPlaceholderNumber = null;
     }
 
     isNextBrackets(expression){
@@ -134,7 +187,7 @@ class TillMultipleOrDivisionOperatorBracketInserter extends CommonToolkit{
 
 
     calculateExpression(){
-        while (this.isItemNumberOrIn('*/',this.viewedItem)){
+        while (this.isItemExpressionOrIn('*/',this.viewedItem)){
             this.addCloseBracketIfNeeded_changeLocalState()
             this.index++;
             this.viewedItem = this.expressionAsList[this.index]
