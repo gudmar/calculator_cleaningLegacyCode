@@ -22,6 +22,7 @@ class Calculator{
 		this.validator = new StringExpressionValidator()
 		this.infixToPrefixConverter = new InfixToPrefix();
 		this.expressionStringToListConverter = new StringToExpression();
+		this.bracketAdder = new NestedExpressionInserter();
 	}
 	validateExpression(expressionAsString){
 		return this.validator.validate(expressionAsString)
@@ -35,7 +36,9 @@ class Calculator{
 	compute(expressionAsString){
 		if (!this.validateExpression(expressionAsString)) return 'Error'
 		let expressionAsList = this.convertStingToListOfChars(expressionAsString);
-		let expressionInPrefixNotation = this.convertInfixToPrefix(expressionAsList)
+		let expressionWithAddedBrackets = this.bracketAdder.addBrackets(expressionAsList)
+		let expressionInPrefixNotation = this.convertInfixToPrefix(expressionWithAddedBrackets)
+		
 		console.log(expressionAsList)
 		console.log(expressionInPrefixNotation)
 		return evaluate(expressionInPrefixNotation.map((item)=>{return isNaN(item)?item:parseFloat(item)}))

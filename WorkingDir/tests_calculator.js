@@ -164,12 +164,10 @@ let testCase30 = {
     expectedResult: '0.025'
 }
 
-// let allTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
-//                     testCase6, testCase7, testCase9, testCase10, testCase11, 
-//                     testCase12, testCase13, testCase14, testCase15, testCase16,
-//                     testCase17, testCase18, testCase19, testCase20, testCase21,
-//                     testCase22, testCase23, testCase24, testCase25, testCase27, testCase28, testCase30
-//                 ];
-let testCases = [testCase29
+let testCases = [testCase1, testCase2, testCase3, testCase4, testCase5,
+    testCase6, testCase7, testCase9, testCase10, testCase11,
+    testCase12, testCase13, testCase14, testCase15, testCase16,
+    testCase17, testCase18, testCase19, testCase20, testCase21,
+    testCase22, testCase23, testCase24, testCase25, testCase27, testCase28, testCase30
 ];
 
