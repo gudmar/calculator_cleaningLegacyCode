@@ -29,38 +29,82 @@ class CommonToolkit{
 
 
     isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item) == -1 ? false : true}
+
+
 }
+
 
 class NestedExpressionInserter extends CommonToolkit{
     constructor(){
         super()
         this.extractor = new ExpressionInBracketExtractor();
         this.bracketAdder = new BracketsFromLeftAdderInCaseOfDivision();
+        Array.prototype.replace = function(pattern, newElements) {
+            let copy = [...this]
+            let index = this.indexOf(pattern)
+            let removeFromArray = function(){copy.splice(index, 1)}
+            let addSingleToArray = function(element){
+                copy.splice(index, 0, element)
+                index++;
+            }
+            removeFromArray();
+            console.log('Replacing: ' + pattern + " with " ); console.log(newElements)
+            console.log(newElements)
+            newElements.forEach(addSingleToArray)
+            console.log(copy)
+            return copy
+        }
     }
 
     addBrackets(_expression){
         let {expression, mappingObject} = this.extractor.replaceFirstLayerBrackets(_expression)
+        console.log(_expression)
+        console.log(mappingObject)
+        console.log(this.isMappingObjectEmpty(mappingObject))
+        if (this.isMappingObjectEmpty(mappingObject)) return this.bracketAdder.analyzeAndAddBrackets(_expression)
         let expressionWithBrackets = this.bracketAdder.analyzeAndAddBrackets(expression)
         let subexpressionsWithBrackets = this.getMappingObjectWithBrackets(mappingObject)
+        console.log(subexpressionsWithBrackets)
+        console.log(expressionWithBrackets)
         let output = this.replacePlaceholdersWithExpressions(expressionWithBrackets, subexpressionsWithBrackets)
+        console.log(output)
         return output
     }
 
     getMappingObjectWithBrackets(mappingObject) {
-        let getSingleExpressionWithBrackets = function(key){
-            return this.addBrackets(mappingObject[key])
+        console.log(mappingObject)
+        let addBracketsToSingeSubexpression = function(key){
+            let itemWithBrackets = this.addBrackets(mappingObject[key])
+            mappingObject[key] = itemWithBrackets
+            console.log(itemWithBrackets)
         }.bind(this)
-        let output = Object.keys(mappingObject).map(getSingleExpressionWithBrackets)
+        // let output = Object.keys(mappingObject).map(getSingleExpressionWithBrackets)
+        for (let key in mappingObject) {
+            addBracketsToSingeSubexpression(key)
+        }
+        let output = mappingObject
+        console.log(output)
         return output
     }
 
     replacePlaceholdersWithExpressions(expressionWithPlaceholders, mappingObject){
+        
+        if (this.isMappingObjectEmpty(mappingObject)) return expressionWithPlaceholders;
+        let _expressionWithPlaceholders = [...expressionWithPlaceholders]
+        let expressionWithReplacedPlaceholders = [...expressionWithPlaceholders];
         let replaceSingle = function(placeholder){
-            let pattern = new RegExp(`${placeholder}`)
-            return expressionWithPlaceholders.replace(pattern, `(${mappingObject[placeholder]})`)
+            console.log(placeholder)
+            expressionWithReplacedPlaceholders = expressionWithReplacedPlaceholders.replace(placeholder, ['(', ...mappingObject[placeholder], ')'])//`(${mappingObject[placeholder]})`)
+            console.log(_expressionWithPlaceholders)
+            console.log(expressionWithReplacedPlaceholders)
         }
-        let output = Object.keys(mappingObject).map(replaceSingle)
-        return output
+        console.log(mappingObject)
+        Object.keys(mappingObject).forEach(replaceSingle)
+        return expressionWithReplacedPlaceholders
+    }
+
+    isMappingObjectEmpty(mappingObject){
+        return Object.keys(mappingObject).length == 0
     }
 
 
@@ -118,8 +162,6 @@ class ExpressionInBracketExtractor extends CommonToolkit{
     memorizeAndReplaceSingleMatch(expression){
         let placeholder = this.generateNextPlaceholder();
         let match = this.findSingleMatch(expression);
-        console.log(placeholder)
-        console.log(match)
         this.replaceSingleMatch(expression, match, placeholder);
         this.replacedMapper[placeholder] = this.pealL1Brackets(match.foundSubExpression)
     }
@@ -136,7 +178,7 @@ class ExpressionInBracketExtractor extends CommonToolkit{
         if (this.lastAddedPlaceholderNumber == null) {
             this.lastAddedPlaceholderNumber = 0; return 'p0'
         }
-         return `p${this.lastAddedPlaceholderNumber++}`
+         return `p${++this.lastAddedPlaceholderNumber}`
     }
 }
 
@@ -148,7 +190,6 @@ class BracketsFromLeftAdderInCaseOfDivision extends CommonToolkit{
 
     analyzeAndAddBrackets(expressionAsList){
         let reversedExpression = [...expressionAsList].reverse()
-        console.log(reversedExpression[0])
         let index = 0;
         while (index < reversedExpression.length){
             let item = reversedExpression[index];
