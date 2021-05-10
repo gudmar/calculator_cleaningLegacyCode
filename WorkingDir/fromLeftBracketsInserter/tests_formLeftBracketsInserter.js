@@ -81,61 +81,67 @@ let testCase1 = {
     expression: '1/2*3',
     expectedResult: '(1/2)*3'
 }
-let testCase10 = {
+let testCase2 = {
     name: ' 1 / 2 * 3 / 4 * 5 / 6 / 7 / 8 ',
     expression: '1/2*3/4*5/6/7/8',
     expectedResult: '((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8'
 }
-let testCase11 = {
+let testCase3 = {
     name: '1 / 2 * 9 * 3 / 4 * 5 / 6 / 7 / 8',
     expression: '1/2*9*3/4*5/6/7/8',
     expectedResult: '((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8'
 }
-let testCase12 = {
+let testCase4 = {
     name: '1 / 2 - 1 / 2 * 9 * 3 / 4 * 5 / 6 / 7 / 8 + 1 / 2 * 5 * 2',
     expression: '1/2-1/2*9*3/4*5/6/7/8+1/2*5*2',
     expectedResult: '1/2-((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8 + (1/2)*5*2'
 }
-let testCase13 = {
+let testCase5 = {
     name: '1 / 2 - 1 / 2 * 9 * 3 / 4 * 5 / 6 / 7 / 8 + 1 * 2 * 3 / 2 * 5 * 2 - 1 * 2 / 3 + 4',
     expression: '1/2-1/2*9*3/4*5/6/7/8+1*2*3/2*5*2-1*2/3+4',
     expectedResult: '1/2-((((((1 / 2) * 9 * 3) / 4) * 5) / 6) / 7) / 8 + ((1 * 2 * 3)/2)*5*2 - (1*2)/3 + 4'
 }
 
-let testCase95 = {
-    name: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10) [Brackets present: no change]',
-    expression: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)',
-    expectedResult: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)'
+let testCase6 = {
+    name: '((19+29))/(79+89)',
+    expression: '((19+29))/(79+89)',
+    expectedResult: '((19+29))/(79+89)'
 }
-let testCase99 = {
+
+let testCase7 = {
+    name: '(((1+2)*(3-4)*(5+6))/(7+8))*(9+10) [Brackets present: no change]',
+    expression: '(((1+2)*(3-4)*(5+6))/(7+8))*(9+10)',
+    expectedResult: '(((1+2)*(3-4)*(5+6))/(7+8))*(9+10)'
+}
+let testCase8 = {
     name: '((((((1/2)*3)/4)*5)/6)/7)/8 [Brackets present: no change',
     expression: '((((((1/2)*3)/4)*5)/6)/7)/8',
     expectedResult: '((((((1/2)*3)/4)*5)/6)/7)/8'
 }
-let testCase100 = {
+let testCase9 = {
     name: '(1+2)*(3-4)*(5+6)/(7+8)*(9+10)',
     expression: '(1+2)*(3-4)*(5+6)/(7+8)*(9+10)',
-    expectedResult: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)'
+    expectedResult: '(((1+2)*(3-4)*(5+6))/(7+8))*(9+10)'
 }
-let testCase101 = {
+let testCase10 = {
     name: '1/2*3/4*5/6/7/8',
     expression: '1/2*3/4*5/6/7/8',
     expectedResult: '((((((1/2)*3)/4)*5)/6)/7)/8'
-    // ((((((1 / 2) * 3) / 4) * 5) / 6) / 7) / 8
+}
+let testCase11 = {
+    name: '(1+2)/(3+4)*(5+6)/(7-8)*(9-10)/(11-12)/(13-14)/(15-16)',
+    expression: '(1+2)/(3+4)*(5+6)/(7-8)*(9-10)/(11-12)/(13-14)/(15-16)',
+    expectedResult: '(((((((1+2)/(3+4))*(5+6))/(7-8))*(9-10))/(11-12))/(13-14))/(15-16)'
+}
+let testCase12 = {
+    name: '(1+2)*((3-2)/((3-2)/(4-(1*(1*4*5/2*3)*5/2*3))-2)*(5+6)/(7+8)*(9+10)',
+    expression: '(((((1+2)*(3-2))/((3-2)/(4-(((1*(((1*4*5)/2)*3)*5)/2)*3))-2))*(5+6))/(7+8))*(9+10)',
+    expectedResult: '(((((1+2)*(3-2))/((3-2)/(4-(((1*(((1*4*5)/2)*3)*5)/2)*3))-2))*(5+6))/(7+8))*(9+10)'
 }
 
-
-
-// let addingBracketsTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, 
-//                     testCase6, testCase7, testCase9, testCase10, testCase11, 
-//                     testCase12, testCase13, testCase14, testCase15, testCase16,
-//                     testCase17, testCase18, testCase19, testCase20, testCase21,
-//                     testCase22, testCase23, testCase24, testCase25, testCase26, testCase27, testCase28
-//                 ];
-
-
-
-let addingBracketsTestCases = [ testCase1, testCase10, testCase11, testCase12, testCase13]
+let addingBracketsTestCases = [testCase1, testCase2, testCase3, testCase4, testCase5, testCase6, 
+                                testCase7, testCase8, testCase10, testCase11, testCase12
+                ];
 
 
 function getPassRatio(){
@@ -188,9 +194,23 @@ appendPassRatio();
 // ==============================  Testing extraction of first layer ============================================
 let extractor = new ExpressionInBracketExtractor()
 let converter = new StringToExpression()
+let extractionInverter = new NestedExpressionInserter();
 // let converter1 = new StringToExpression()
-let testCaseA = converter.convert('2+(3/4)-(4*5/6)+((3+5)/(5-9))+(4-4)');
-console.log(extractor.replaceFirstLayerBrackets(testCaseA))
-let testCaseB = converter.convert('2/3/4/5 * 8 * 9 + 4')
-console.log(extractor.replaceFirstLayerBrackets(testCaseB))
+let testCases = {
+    testCaseA: '2+(3/4)-(4*5/6)+((3+5)/(5-9))+(4-4)',
+    testCaseB: '2/3/4/5 * 8 * 9 + 4',
+    testCaseC: '((2/3/4/5 * 8 * 9 + 4))',
+    testCaseD: '((1+2)*(3-4)*(5+6))/(7+8)*(9+10)',
+    testCaseE: '((1+2))/(7+8)'
+}
+
+// for (let test in testCases) {
+//     console.log('%c' + test.toUpperCase(), 'background-color: black; color: white; padding: 5px; border-radius: 5px; font-weight: bold;');
+//     let tc = converter.convert(testCases[test])
+//     let {mappingObject, expression} = extractor.replaceFirstLayerBrackets(tc);
+//     console.log(testCases[test])
+//     console.log({mappingObject, expression})
+//     console.log(extractionInverter.replacePlaceholdersWithExpressions(expression, mappingObject))
+// }
+
 
