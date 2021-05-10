@@ -31,6 +31,20 @@ class CommonToolkit{
     isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item) == -1 ? false : true}
 
 
+    replaceInArray(_array, pattern, newElements){
+        let arrayCopy = [..._array]
+        let index = arrayCopy.indexOf(pattern)
+        let removeFromArray = function(){arrayCopy.splice(index, 1)}
+        let addSingleToArray = function(element){
+            arrayCopy.splice(index, 0, element);
+            index++;
+        }
+
+        removeFromArray();
+        newElements.forEach(addSingleToArray)
+        return arrayCopy
+    }
+
 }
 
 
@@ -39,77 +53,46 @@ class NestedExpressionInserter extends CommonToolkit{
         super()
         this.extractor = new ExpressionInBracketExtractor();
         this.bracketAdder = new BracketsFromLeftAdderInCaseOfDivision();
-        Array.prototype.replace = function(pattern, newElements) {
-            let copy = [...this]
-            let index = this.indexOf(pattern)
-            let removeFromArray = function(){copy.splice(index, 1)}
-            let addSingleToArray = function(element){
-                copy.splice(index, 0, element)
-                index++;
-            }
-            removeFromArray();
-            console.log('Replacing: ' + pattern + " with " ); console.log(newElements)
-            console.log(newElements)
-            newElements.forEach(addSingleToArray)
-            console.log(copy)
-            return copy
-        }
     }
 
     addBrackets(_expression){
         let {expression, mappingObject} = this.extractor.replaceFirstLayerBrackets(_expression)
-        console.log(_expression)
-        console.log(mappingObject)
-        console.log(this.isMappingObjectEmpty(mappingObject))
         if (this.isMappingObjectEmpty(mappingObject)) return this.bracketAdder.analyzeAndAddBrackets(_expression)
         let expressionWithBrackets = this.bracketAdder.analyzeAndAddBrackets(expression)
         let subexpressionsWithBrackets = this.getMappingObjectWithBrackets(mappingObject)
-        console.log(subexpressionsWithBrackets)
-        console.log(expressionWithBrackets)
-        let output = this.replacePlaceholdersWithExpressions(expressionWithBrackets, subexpressionsWithBrackets)
-        console.log(output)
-        return output
+        return  this.replacePlaceholdersWithExpressions(expressionWithBrackets, subexpressionsWithBrackets)
     }
 
     getMappingObjectWithBrackets(mappingObject) {
-        console.log(mappingObject)
         let addBracketsToSingeSubexpression = function(key){
             let itemWithBrackets = this.addBrackets(mappingObject[key])
             mappingObject[key] = itemWithBrackets
-            console.log(itemWithBrackets)
         }.bind(this)
-        // let output = Object.keys(mappingObject).map(getSingleExpressionWithBrackets)
         for (let key in mappingObject) {
             addBracketsToSingeSubexpression(key)
         }
-        let output = mappingObject
-        console.log(output)
-        return output
+        return mappingObject
     }
 
-    replacePlaceholdersWithExpressions(expressionWithPlaceholders, mappingObject){
-        
+    replacePlaceholdersWithExpressions(expressionWithPlaceholders, mappingObject) {
         if (this.isMappingObjectEmpty(mappingObject)) return expressionWithPlaceholders;
         let _expressionWithPlaceholders = [...expressionWithPlaceholders]
         let expressionWithReplacedPlaceholders = [...expressionWithPlaceholders];
-        let replaceSingle = function(placeholder){
-            console.log(placeholder)
-            expressionWithReplacedPlaceholders = expressionWithReplacedPlaceholders.replace(placeholder, ['(', ...mappingObject[placeholder], ')'])//`(${mappingObject[placeholder]})`)
-            console.log(_expressionWithPlaceholders)
-            console.log(expressionWithReplacedPlaceholders)
-        }
-        console.log(mappingObject)
+        let replaceSingle = function (placeholder) {
+            expressionWithReplacedPlaceholders = this.replaceInArray(expressionWithReplacedPlaceholders,
+                placeholder, ['(', ...mappingObject[placeholder], ')'])
+        }.bind(this)
+        
         Object.keys(mappingObject).forEach(replaceSingle)
         return expressionWithReplacedPlaceholders
     }
 
+
     isMappingObjectEmpty(mappingObject){
         return Object.keys(mappingObject).length == 0
     }
-
-
-
 }
+
 
 class ExpressionInBracketExtractor extends CommonToolkit{
     constructor(){
@@ -117,6 +100,7 @@ class ExpressionInBracketExtractor extends CommonToolkit{
         this.replacedMapper = {};
         this.lastAddedPlaceholderNumber = null;
     }
+
 
     replaceFirstLayerBrackets(_expression){
         while (this.isNextBrackets(_expression)){
@@ -131,14 +115,17 @@ class ExpressionInBracketExtractor extends CommonToolkit{
         return output
     }
 
+
     clean(){
         this.replacedMapper = {};
         this.lastAddedPlaceholderNumber = null;
     }
 
+
     isNextBrackets(expression){
         return expression.indexOf('(') !=-1 ? true : false
     }
+
 
     findSingleMatch(expression){
         let startIndex = expression.indexOf('(');
@@ -159,6 +146,7 @@ class ExpressionInBracketExtractor extends CommonToolkit{
         return output;
     }
 
+
     memorizeAndReplaceSingleMatch(expression){
         let placeholder = this.generateNextPlaceholder();
         let match = this.findSingleMatch(expression);
@@ -166,13 +154,16 @@ class ExpressionInBracketExtractor extends CommonToolkit{
         this.replacedMapper[placeholder] = this.pealL1Brackets(match.foundSubExpression)
     }
 
+
     pealL1Brackets(expression) {
         return expression.slice(1, expression.length-1)
     }
 
+
     replaceSingleMatch(expression, {indexStart, indexEnd, foundSubExpression}, newElements){
         expression.splice(indexStart, foundSubExpression.length, newElements)
     }
+
 
     generateNextPlaceholder(){
         if (this.lastAddedPlaceholderNumber == null) {
@@ -199,7 +190,6 @@ class BracketsFromLeftAdderInCaseOfDivision extends CommonToolkit{
                 index = bracketAdder.getCurrentIndexAfterAddingBrackets()
                 reversedExpression = bracketAdder.getExpressionWithBrackets()
             }
-
             index++;
         }
         return reversedExpression.reverse()
@@ -255,6 +245,7 @@ class TillMultipleOrDivisionOperatorBracketInserter extends CommonToolkit{
         return currentIndex - 1
     }
 
+
     getPreviousOperator(){
         return this.index < 2 ? null : this.expressionAsList[this.index - 2];
     }
@@ -265,7 +256,6 @@ class TillMultipleOrDivisionOperatorBracketInserter extends CommonToolkit{
         if (this.viewedItem == '*' && this.lastOperator == '*') return null
         if (this.isItemIn('-+', this.getPreviousOperator())) return null
         if (this.isItemIn('*/', this.viewedItem) && (this.index > 1)) {
-            console.log(this.getPreviousOperator())
             this.lastOperator = this.expressionAsList[this.index]
             this.insertCloseBracket()
             this.bracketsToOpen++
