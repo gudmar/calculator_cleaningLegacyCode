@@ -126,7 +126,7 @@ let testCase22 = {
 let testCase23 = {
     name: '(3-4)*((9-8)/(10-100)*(((4-3)*(8-6))/(9-800))=-0.00002809383',
     expression: '(3-4)*((9-8)/(10-100)*(((4-3)*(8-6))/(9-800)))',
-    expectedResult: '-0.00002809383'    
+    expectedResult: '-0.00002809383340356792'    
 }
 let testCase24 = {
     name: '1/(2)+(1/4)+(1/(2*2*2)+(1/2*2*2*2)+1/(2*2*2*2*2))=4.90625',
@@ -139,9 +139,9 @@ let testCase25 = {
     expectedResult: '1.875'    
 }
 let testCase26 = {
-    name: '(9/0)*0=undefined',
+    name: '(9/0)*0=Infinity',
     expression: '(9/0)*0',
-    expectedResult: 'undefined'
+    expectedResult: 'Infinity'
 }
 let testCase27 = {
     name: '(1-9/0)*0=undefined',

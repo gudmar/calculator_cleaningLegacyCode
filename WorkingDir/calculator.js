@@ -45,12 +45,26 @@ class Calculator{
 	}
 }
 
-
+function isUnasigned(arg1, arg2, op){
+	console.log(Math.abs(arg1))
+	console.log(Math.abs(arg2))
+	console.log(arg1 + '  ' + arg2)
+	if (arg1 == undefined || arg2 == undefined) return true;
+	if (op == '/' && Math.abs(arg1) == Infinity) return true;
+	if (op == '*' && Math.abs(arg1) == 0 && Math.abs(arg2) == Infinity) return true;
+	if (op == '*' && Math.abs(arg2) == 0 && Math.abs(arg1) == Infinity) return true;
+	if (Math.abs(arg1) == Infinity && Math.abs(arg2) == Infinity) {
+		if (op == '-' || op == '/'){
+			return true
+		}
+	}
+	return false;
+}
 
 
 function evaluate(inputList) {
 	var operandStack = [];
-	var operators = "+-*/x";
+	var operators = "+-*/";
 	var isSyntaxError = false;
 	var elementA = 0,
 		elementB = 0,
@@ -61,6 +75,8 @@ function evaluate(inputList) {
 		
 	function myEval(arg1, arg2, op) {
 		var result = 0;
+		// if (isUnasigned(arg1, arg2, op)) console.log('UNSIGNED')
+		if (isUnasigned(arg1, arg2, op)) return undefined
 		switch(op) {
 			case "+":
 				result = arg1 + arg2;
@@ -70,9 +86,6 @@ function evaluate(inputList) {
 				break;
 			case "/":
 				result = arg2 / arg1;
-				break;
-			case "x":
-				result = arg1 * arg2;
 				break;
 			case "*":
 				result = arg1 * arg2;
@@ -91,6 +104,7 @@ function evaluate(inputList) {
 				elementB = operandStack.pop();
 				console.log(elementA); console.log(elementB)
 				partialResult = myEval(elementB, elementA, inputList[i]); 
+				if (partialResult == undefined) return undefined
 				console.log(`PARTIAL RESULT: ${elementA} ${inputList[i]} ${elementB} : ${partialResult}`);
 				if (isNaN(partialResult)) { throw "syntaxError";}
 				operandStack.push(partialResult);	
