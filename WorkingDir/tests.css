@@ -1,14 +1,57 @@
 *{
     font-family: Arial, Helvetica, sans-serif
 }
+
+#result{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+table{
+    max-width: 1200px;
+}
 td{
     padding: 1rem;
+    border-radius: 5px;
+}
+th{
+    background-color: gray;
+    color: white;
+    border-radius: 5px;
+    padding: 0.5rem;
+
 }
 .PASS{
+    transition: 200ms;
     background-color: green;
     color: white
 }
 .FAIL{
+    transition: 200ms;
     background-color: red;
     color: white
+}
+tr.PASS:hover{
+    transition: 200ms;
+    background-color: greenyellow;
+    color: black;
+}
+tr>.FAIL:hover{
+    transition: 200ms;
+    background-color: orangered;
+    color:black;
+}
+
+@media screen and (max-width: 800px){
+    th:nth-child(2), td:nth-child(2){
+        display: none;
+    }
+    th:nth-child(3), td:nth-child(3){
+        display: none;
+    }
+    th:nth-child(4), td:nth-child(4) {
+        display: none;
+    }
+
 }
