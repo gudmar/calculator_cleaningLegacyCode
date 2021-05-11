@@ -72,6 +72,7 @@ class Test{
             return evaluated == expected ? 'PASS' : 'FAIL'
         }
         console.log(`%cCalculated result for ${this.expression} is : ${calculatedResult}`, 'background-color: blue; color: white; font-weight: bold;')
+        calculatedResult = calculatedResult == undefined ? 'undefined' : calculatedResult.toString();
         return evaluateAndReturnResult(calculatedResult.toString(), this.expectedResult.toString())
     }
 }
