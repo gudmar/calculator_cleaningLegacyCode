@@ -18,13 +18,13 @@ class Calculator extends AbstractComponent{
         return `
             <style>
             *{
-                --button-width: 30px;
-                --button-height: 30px;
+                --button-width: 50px;
+                --button-height: 50px;
                 
                 --button-font-size: 1.3rem;
                 --button-border-width: 4px;
                 --button-border-width: 0.2rem;
-                --button-long: calc( 60px + calc( var(--button-border-width) * 2));
+                --button-long: calc( 100px + calc( var(--button-border-width) * 2));
             }
             .center{
                 display: flex;
@@ -32,6 +32,7 @@ class Calculator extends AbstractComponent{
                 justify-content: center;
             }
             .housing {
+                flex-direction: column;
                 width: 500px;
                 height: 500px;
                 border-style: solid;
@@ -42,6 +43,29 @@ class Calculator extends AbstractComponent{
                 box-shadow: 1.5vw 1vw 4px rgb(0, 0, 0);
                 margin: auto;
             }
+            .display{
+                width: 76%;
+                height: 100px;
+                text-align: right;
+                font-family: 'Courier New', Courier, monospace;
+                color: green;
+                background-color: black;
+                border: 4px inset rgb(118, 118, 118);
+                font-size: 25px;
+                padding: 5px;
+                resize: none;
+            }
+            .display:focus{
+                outline: none;
+            }
+            .display::-webkit-scrollbar {
+                width: 6px;
+            }
+            .display::-webkit-scrollbar-thumb {
+                background-color: green;
+                border-radius: 3px;
+              }
+
             .button {
                 float:left;
                 font-family: Arial, Helvetica, sans-serif;
@@ -120,9 +144,19 @@ class Calculator extends AbstractComponent{
             }
 
             @media screen and (max-width: 500px){
+                *{
+                    --button-width: 40px;
+                    --button-height: 40px;
+                    
+                    --button-font-size: 1.3rem;
+                    --button-border-width: 4px;
+                    --button-border-width: 0.2rem;
+                    --button-long: calc( 80px + calc( var(--button-border-width) * 2));
+                }
                 .housing {
                     width: 300px;
-                    height: 400px;
+                    height: 500px;
+                    padding
                 }
                 .controls{
                     flex-direction: row;
@@ -140,7 +174,10 @@ class Calculator extends AbstractComponent{
                     flex-direction: row;
                 }
                 .button-wrapper{
-                    height: calc( var(--button-height) * 9);
+                    padding-top: 10px;
+                    padding-bottom: 0px;
+                    height: calc( var(--button-height) * 8);
+                    width: calc( calc(var(--button-width) * 4) + calc(8 * var(--button-border-width)));
                     flex-direction: column;
                 }
                 .button-absolute{
@@ -163,8 +200,8 @@ class Calculator extends AbstractComponent{
 
             </style>
         
-            <div class = "housing">
-                <div class = "display"></div>
+            <div class = "housing center">
+                <textarea class = "display" id = "display" spellcheck=false value=0>0</textarea>
                 <div class = "button-wrapper">
                     <div class = "button-container controls">${this.getControlButtonsAsString()}</div>
                     <div class = "button-container numbers">
@@ -175,6 +212,7 @@ class Calculator extends AbstractComponent{
                 </div>
             </div>
         `
+        // <input type="text" class = "display" id = "display" spellcheck=false value=0>
         }
         getControlButtonsAsString(){
             let buttons = [{label: 'IO', additionalClasses: 'red-button'},
