@@ -1,10 +1,12 @@
 
 
 
-class Calculator extends AbstractComponent{
+class CalculatorWidget extends AbstractComponent{
     constructor() {
         super()
-
+        this.display = this.shadowRoot.querySelector('#display')
+        this.isTurnedOn = true;
+        this.calculator = new Calculator(6);
     }
 
     static get observedAttributes() {
@@ -25,6 +27,7 @@ class Calculator extends AbstractComponent{
                 --button-border-width: 4px;
                 --button-border-width: 0.2rem;
                 --button-long: calc( 100px + calc( var(--button-border-width) * 2));
+                --display-color: rgb(100, 250, 100);
             }
             .center{
                 display: flex;
@@ -48,7 +51,7 @@ class Calculator extends AbstractComponent{
                 height: 100px;
                 text-align: right;
                 font-family: 'Courier New', Courier, monospace;
-                color: green;
+                color: var(--display-color);
                 background-color: black;
                 border: 4px inset rgb(118, 118, 118);
                 font-size: 25px;
@@ -62,7 +65,7 @@ class Calculator extends AbstractComponent{
                 width: 6px;
             }
             .display::-webkit-scrollbar-thumb {
-                background-color: green;
+                background-color: rgb(100, 250, 100);
                 border-radius: 3px;
               }
 
@@ -96,16 +99,18 @@ class Calculator extends AbstractComponent{
                 background: linear-gradient(-45deg, red, rgba(250, 70, 70, 0.7));
             }
             .orange-button {
-                background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.1));
-            }
-            .orange-button:hover {
-                background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.9));
-            }
-            .green-button {
+                
                 background: linear-gradient(-45deg, orange, rgba(250, 0, 0, 0.1));
             }
-            .green-button:hover {
+            .orange-button:hover {
+                
                 background: linear-gradient(-45deg, orange, rgba(250, 70, 70, 0.7));
+            }
+            .green-button {
+                background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.1));
+            }
+            .green-button:hover {
+                background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.9));
             }
             .heigh-button {
                 height: var(--button-long)
@@ -201,7 +206,7 @@ class Calculator extends AbstractComponent{
             </style>
         
             <div class = "housing center">
-                <textarea class = "display" id = "display" spellcheck=false value=0>0</textarea>
+                <textarea class = "display" id = "display" spellcheck=false>0</textarea>
                 <div class = "button-wrapper">
                     <div class = "button-container controls">${this.getControlButtonsAsString()}</div>
                     <div class = "button-container numbers">
@@ -229,15 +234,13 @@ class Calculator extends AbstractComponent{
             }
 
         getOperatorButtonsAsString() {
-            let descriptors =  [{label: 'x', action: `this.writeToDisplay('*')`}, {label: '(', action: `this.writeToDisplay('(')`}, 
-                                {label: '/', action: `this.writeToDisplay('/')`}, {label: ')', action: `this.writeToDisplay(')')`},
-                                {label: '-', action: `this.writeToDisplay('-')`}, {label: '=', action: `this.writeToDisplay('=')`, additionalClasses: 'heigh-button'},
-                                {label: '+', action: `this.writeToDioplay('+')`, additionalClasses: 'button-absolute'}]
+            let descriptors =  ['x', '(', '/', ')', '-', {label: '=', additionalClasses: `heigh-button`},
+                                {label: '+', additionalClasses: 'button-absolute'}]
             return this.getButtonsAsStrings(descriptors)
         }
 
         getButtonsAsStrings(buttonsDescriptor){
-            let arrayOfStringButtons = buttonsDescriptor.map(this.getSingleButtonAsString)
+            let arrayOfStringButtons = buttonsDescriptor.map(this.getSingleButtonAsString.bind(this))
             console.log(arrayOfStringButtons)
             return arrayOfStringButtons.join('')
             return arrayOfStringButtons.reduce((acc, element, index) => {
@@ -249,16 +252,95 @@ class Calculator extends AbstractComponent{
         getSingleButtonAsString(descriptor){
             let label = '', additionalClasses = '', action = '';
             
-            if (typeof(descriptor) == 'number'){
+            if (this.isItemIn('1234567890()*x/+-.', descriptor)){
                 label = '' + descriptor;
-                action = `this.writeToDisplay(${label})`
             }
             if (typeof(descriptor) == 'object'){
                 label = descriptor.label;
                 additionalClasses = descriptor.additionalClasses == undefined ? '' : descriptor.additionalClasses;
-                action = descriptor.action != undefined ? `onclick = ${descriptor.action}` : ``
             }
-            return `<div class = 'button center ${additionalClasses}' ${action}>${label}</div>`
+            return `<div class = 'button center ${additionalClasses}'>${label}</div>`
+        }
+
+        addEventListenersToButtons(){
+            let allButtons = this.shadowRoot.querySelectorAll('.button')
+            let getCallbackForEventListner = function(buttonAsElement){
+                let buttonLabel = buttonAsElement.innerText;
+                if (this.isItemIn('1234567890()/+-.', buttonLabel)) return this.writeToDisplay.bind(this, buttonLabel)
+                if (buttonLabel == 'CE') return this.removeLastFromDisplay.bind(this)
+                if (buttonLabel == 'C') return this.replaceDisplayContent.bind(this, '0')
+                if (buttonLabel == 'IO') return this.turnOnOff.bind(this)
+                if (buttonLabel == '=') return this.computeFilnaResult.bind(this)
+                if (buttonLabel == 'x') return this.writeToDisplay.bind(this, '*')
+            }.bind(this)
+            let addEventListenerToButton = function(buttonAsElement){
+                buttonAsElement.addEventListener('click', getCallbackForEventListner.call(this, buttonAsElement))
+            }.bind(this)
+            allButtons.forEach(addEventListenerToButton)
+            
+        }
+
+        removeLastFromDisplay(){
+            if (!this.isTurnedOn) return null;
+            let currentDisplay = this.readFromDisplay();
+
+            if (this.isSymbolResettingDisplayDisplayed()) {this.replaceDisplayContent('0'); return null};
+            if (currentDisplay.length == 1) {
+                if (currentDisplay == 0) return null
+                else {this.replaceDisplayContent('0'); return null}
+            } else if (currentDisplay.length > 1) {
+                this.replaceDisplayContent(currentDisplay.slice(0, currentDisplay.length - 1))
+                return null;
+            } else {
+                this.replaceDisplayContent('0');
+            }
+        }
+
+        isSymbolResettingDisplayDisplayed(){
+            let currentDisplay = this.readFromDisplay();
+            let symbolsResettingDisplay = [
+                /Infinity/,
+                /Error/,
+                /undefined/
+            ]
+            for (let s of symbolsResettingDisplay){
+                if (s.test(currentDisplay)) return true
+            }
+            return false;
+        }
+
+        writeToDisplay(character){
+            let currentDisplay = this.readFromDisplay();
+            if (!this.isTurnedOn) return null;
+            if (this.isSymbolResettingDisplayDisplayed()) {this.replaceDisplayContent(character); return null;}
+            if ((currentDisplay == 0) && !this.isOperator(character)) {
+                this.replaceDisplayContent(character)
+            }
+            else {
+                this.display.value = currentDisplay + character
+            }
+        }
+
+        isOperator(character) {return this.isItemIn('+x*-/')}
+
+        replaceDisplayContent(expressionAsString){
+            this.display.value = expressionAsString
+        }
+
+        readFromDisplay(){
+            console.log(this.display['value'])
+            return this.display.value;
+        }
+
+        computeFilnaResult(){
+            if (!this.isTurnedOn) return null;
+            this.replaceDisplayContent(this.calculator.compute(this.readFromDisplay()))
+        }
+    
+        turnOnOff(){
+            this.isTurnedOn = !this.isTurnedOn
+            if (this.isTurnedOn) {this.replaceDisplayContent('0')}
+            else (this.replaceDisplayContent(''))
         }
 
 
@@ -267,10 +349,11 @@ class Calculator extends AbstractComponent{
     attributeChangedCallback(name, oldValue, newValue) {
     }
     connectedCallback(){
+        this.addEventListenersToButtons();
     }
 
 
 
 
 }
-customElements.define('custom-claculator', Calculator)
+customElements.define('custom-claculator', CalculatorWidget)

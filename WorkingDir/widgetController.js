@@ -1,7 +1,7 @@
 class CalculatorHardwareController{
     constructor(){
         this.display = document.getElementById('display');
-        this.calculator = new Calculator();
+        this.calculator = new Calculator(6);
         this.isTurnedOn = true;
     }
 
