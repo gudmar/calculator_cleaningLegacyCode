@@ -36,8 +36,8 @@ class CalculatorWidget extends AbstractComponent{
             }
             .housing {
                 flex-direction: column;
-                width: 500px;
-                height: 500px;
+                width: 420px;
+                height: 400px;
                 border-style: solid;
                 border-width: 1px;
                 border-color: black;
@@ -47,7 +47,7 @@ class CalculatorWidget extends AbstractComponent{
                 margin: auto;
             }
             .display{
-                width: 76%;
+                width: 380;
                 height: 100px;
                 text-align: right;
                 font-family: 'Courier New', Courier, monospace;
@@ -67,6 +67,11 @@ class CalculatorWidget extends AbstractComponent{
             .display::-webkit-scrollbar-thumb {
                 background-color: rgb(100, 250, 100);
                 border-radius: 3px;
+              }
+
+              .button-container{
+                  border-radius: 3px;
+                  border: solid rgb(60, 80, 90);
               }
 
             .button {
@@ -98,6 +103,10 @@ class CalculatorWidget extends AbstractComponent{
             .red-button:hover {
                 background: linear-gradient(-45deg, red, rgba(250, 70, 70, 0.7));
             }
+            .red-button:active {
+                background: linear-gradient(-45deg, red, yellow);
+                transition: 250ms;
+            }
             .orange-button {
                 
                 background: linear-gradient(-45deg, orange, rgba(250, 0, 0, 0.1));
@@ -106,11 +115,19 @@ class CalculatorWidget extends AbstractComponent{
                 
                 background: linear-gradient(-45deg, orange, rgba(250, 70, 70, 0.7));
             }
+            .orange-button:active {
+                background: linear-gradient(-45deg, orange, red);
+                transition: 250ms;
+            }
             .green-button {
                 background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.1));
             }
             .green-button:hover {
                 background: linear-gradient(-45deg, green, rgba(0, 250, 0, 0.9));
+            }
+            .green-button:active {
+                background: linear-gradient(-45deg, yellow, rgba(70, 250, 250, 0.3));
+                transition: 250ms;
             }
             .heigh-button {
                 height: var(--button-long)
@@ -126,9 +143,8 @@ class CalculatorWidget extends AbstractComponent{
                 display: flex;
                 flex-direction: row;
                 justify-content: space-around;
-                width: calc( calc( var(--button-border-width) * 2) * 8);
-                width: 80%;
-                padding: 30px;
+                width: 400;
+                padding: 10px;
             }
             .button-container{
                 display: flex;
@@ -159,9 +175,11 @@ class CalculatorWidget extends AbstractComponent{
                     --button-long: calc( 80px + calc( var(--button-border-width) * 2));
                 }
                 .housing {
-                    width: 300px;
-                    height: 500px;
-                    padding
+                    width: 220px;
+                    height: 460px;
+                }
+                .display {
+                    width: 85%;
                 }
                 .controls{
                     flex-direction: row;
