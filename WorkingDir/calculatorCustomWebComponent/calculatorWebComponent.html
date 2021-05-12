@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Online calculator</title>
+      
+      <meta charset="UTF-8" />
+      <meta name="description" content="calculate simple aritmetic" />
+      <meta name="keywords" content="summ, difference multiplication division" />
+      <meta name="author" content="Marek Gudalewicz" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <script src = "../stack.js" defer ></script>
+      <script src = "../infixToPrefix/infixToPrefix.js" defer ></script>
+      <script src = "../displayHandler.js" defer ></script>    
+      <script src = "../validator/validateExpression_regEx.js" defer ></script>    
+      <script src = "../converter/stringToExpression.js" defer ></script>
+      <script src = "../fromLeftBracketsInserter/fromLeftBracketsInserter.js" defer ></script>      
+      <script src = "./abstractWebComponent.js" defer ></script>
+      <script src = "./calculatorCustomComponent.js" defer ></script>
+      
+  </head>
+  <body>
+
+    <div id="placeholder">
+        <custom-claculator></custom-claculator>
+    </div>
+
+  </body>
+</html>
