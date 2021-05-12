@@ -56,4 +56,6 @@ class AbstractComponent extends HTMLElement {
         return date.getDay().toString(36) + date.getHours().toString(36) + date.getMinutes().toString(36) + date.getSeconds().toString(36) + Math.random().toString(36)
     }
 
+    isItemIn(listAsString, item) {return Array.from(listAsString).indexOf(item + '') == -1 ? false : true}
+
 }

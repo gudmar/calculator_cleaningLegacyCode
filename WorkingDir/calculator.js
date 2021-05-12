@@ -1,11 +1,12 @@
 
 class Calculator{
-	constructor(){
+	constructor(nrOfDigitsAfterComma){
 		this.validator = new StringExpressionValidator()
 		this.infixToPrefixConverter = new InfixToPrefix();
 		this.expressionStringToListConverter = new StringToExpression();
 		this.bracketAdder = new NestedExpressionInserter();
 		this.operators = "+-*/";
+		this.nrOfDigitsAfterComma = nrOfDigitsAfterComma;
 	}
 
 
@@ -14,8 +15,13 @@ class Calculator{
 		let expressionAsList = this.convertStingToListOfChars(expressionAsString);
 		let expressionWithAddedBrackets = this.bracketAdder.addBrackets(expressionAsList)
 		let expressionInPrefixNotation = this.convertInfixToPrefix(expressionWithAddedBrackets)
-		
-		return this.evaluate(expressionInPrefixNotation.map((item)=>{return isNaN(item)?item:parseFloat(item)}))
+		let result = this.evaluate(expressionInPrefixNotation.map((item)=>{return isNaN(item)?item:parseFloat(item)}))
+		return this.nrOfDigitsAfterComma === undefined ? result : this.round(result)
+	}
+
+	round(result){
+		let multiplier = Math.pow(10, this.nrOfDigitsAfterComma);
+		return Math.round(parseFloat(result)*multiplier)/multiplier;
 	}
 
 
