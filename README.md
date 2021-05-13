@@ -37,3 +37,22 @@ A file containig a class described above
 A file with tests, that can be used ad usecases
 #### tests_stringToExpression.html
 A file for test execution visualisation
+
+### FromLeftBracketsInserter
+#### fromLeftBracketsInserter.js
+Lets take simple expression as an example: 1/2*3 convers to prefix expression /1 * 2  3, and now if recursive algoritm is taken into account, we got 1/(2*3), and this is wrong, as expected result is (1/2)*3. That is why additional algorithm adding additional brackets is needed. Ofcourse it can be used to diaplay calculated expressoin in a way google calculator whould do. This script adds brackets in a slightly different way than google one, but it is tested and correct.
+#### tests_formLeftBracketsInserter.js
+This file holds test cases for left brackets adder
+#### tests_formLeftBracketsInserter.html
+This is to display test results
+
+### validator
+#### validateStringExpression.js
+Validates if expression passed to calculator is valid. 
+#### validateExpression_regEx.js
+This is cleaner way to implement validation. Based on regular expression. Only a few lines explain valid and not valid rules.
+<b>Note</b> Multiple operators like + or - are allowed, and it is not a bug. +2 always equals to 2. -2 is always -2. --2 is 2, ++2 is 2, +-+-+-2 is -2 etc. However //2 or xxx2 is not allowed, as this makes no sence.
+#### tests_stringValidator_regExp.js, test_stringValidator.js
+Files holding test cases for validator
+#### tests_stringValidator.html and tests_stringValidator_regExp.html
+For presentation of test results
