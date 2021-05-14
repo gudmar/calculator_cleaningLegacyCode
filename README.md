@@ -56,3 +56,26 @@ This is cleaner way to implement validation. Based on regular expression. Only a
 Files holding test cases for validator
 #### tests_stringValidator.html and tests_stringValidator_regExp.html
 For presentation of test results
+
+### infixToPrefix
+Here is a component for converting infix expression order (like a + b + c) to prefix notation like + a + b + c. This is the simple way to perform calculations by calculator component.
+This folder containes set of tests for this component and a page to present test results
+
+### calculatorCuatomComponent
+This is a cusotom web component that allows adding calculator to html only with custom html tag. Contines shadow DOM, so calculators css will not affect any other css.
+This widget is a bit responsive, as it changes orientation when screen is resized
+
+### claculator.js
+This is a file containing class that is used to calculate expressions into values. It depends on validator, infix2prefix, stringToExpression, stack.js
+
+### displayHandler.js
+For adding, removing and reading from calculator widgets display
+
+### stack.js
+This is a classical implementation of stack. Does not use arrays, but objects, and nextElement properties in objects
+
+### test.js
+This is a class for running all tests of all components in this project
+
+### widgetController.js
+This is a simple file for running calcualtor with old css styling and in old html file (from before code cleaning). It is better however to use calculatorCustomWebComponent
